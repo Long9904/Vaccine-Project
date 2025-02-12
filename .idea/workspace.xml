@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eafb776b-3d2f-48f7-9e3b-46209ff0fbc7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/VaccineApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/test/java/com/project/vaccine/VaccineApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="eafb776b-3d2f-48f7-9e3b-46209ff0fbc7" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
