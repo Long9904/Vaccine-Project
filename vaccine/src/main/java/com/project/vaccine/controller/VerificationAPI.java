@@ -54,7 +54,7 @@ public class VerificationAPI {
     }
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         List<Verification> v = verificationService.getAllTokens();
         return ResponseEntity.ok(v);
     }

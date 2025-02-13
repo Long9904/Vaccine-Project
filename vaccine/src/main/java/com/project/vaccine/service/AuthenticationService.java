@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +39,16 @@ public class AuthenticationService implements UserDetailsService {
         List<ErrorDetail> errors = new ArrayList<>();
 
         if (authenticationRepository.findByUsername(userDTO.getUsername()).isPresent()) {
-            errors.add(new ErrorDetail("username", "Username is existence"));
+            errors.add(new ErrorDetail("username", "Username already exists"));
         }
 
         if (authenticationRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            errors.add(new ErrorDetail("email", "Email is existence"));
+            errors.add(new ErrorDetail("email", "Email already exists"));
 
         }
 
         if (authenticationRepository.findByPhone(userDTO.getPhone()).isPresent()) {
-            errors.add(new ErrorDetail("phone", "Phone number is existence"));
+            errors.add(new ErrorDetail("phone", "Phone number already exists"));
         }
 
         if (!errors.isEmpty()) {

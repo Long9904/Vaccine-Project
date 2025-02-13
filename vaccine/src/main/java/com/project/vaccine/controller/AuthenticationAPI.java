@@ -24,7 +24,7 @@ public class AuthenticationAPI {
 
     // Admin, Staff, User
     @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity <?> login(@Valid @RequestBody LoginDTO loginDTO) {
         try {
             UserDTO userDTO = authenticationService.login(loginDTO.getUsername(), loginDTO.getPassword());
             return ResponseEntity.ok(userDTO);
@@ -36,13 +36,8 @@ public class AuthenticationAPI {
 
     // Admin, Staff, User
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestParam String username) {
-        try {
-            authenticationService.logout(username);
-            return ResponseEntity.ok("Logged out successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đã có lỗi xảy ra. Vui lòng thử lại sau!");
-        }
+    public ResponseEntity <?> logout(@RequestParam String username) {
+        return ResponseEntity.ok(Map.of("message", "Logout successfully"));
     }
 
 

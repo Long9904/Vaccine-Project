@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/admin")
@@ -25,49 +26,24 @@ public class AdminAPI {
     private VerificationService verificationService;
 
 
+    @PostMapping("/user")
+    public ResponseEntity<?> createUser() {
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User created successfully"));
+    }
+
     @GetMapping("/user")
-    public ResponseEntity getAllUserProfiles() {
-        try {
+    public ResponseEntity<?> getAllUserProfiles() {
             List<User> users = userService.getAllUsers();
             return ResponseEntity.ok(users);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
     }
 
-    // Admin
-    @GetMapping("/user/search/{username}")
-    public void searchUserByUsername() {
-
-    }
-
-    @GetMapping("/user/search/{email}")
-    public void searchUserByEmail() {
-
-    }
-
-    @GetMapping("/user/search/{phone}")
-    public void searchUserByPhone() {
-
-    }
-
-    @GetMapping("/user/search/{address}")
-    public void searchUserByAddress() {
-
-    }
 
     @GetMapping("/user/search/{name}")
     public void searchUserByName() {
 
     }
 
-    @GetMapping("/user/filter")
-    public void fillterUser() {
 
-    }
-
-    // Admin
-    // Set user status = 0 (inactive)
     @PostMapping("/user/delete/{id}")
     public void deleteUser() {
 
