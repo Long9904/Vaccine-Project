@@ -29,7 +29,7 @@ public class AuthenticationAPI {
             UserDTO userDTO = authenticationService.login(loginDTO.getUsername(), loginDTO.getPassword());
             return ResponseEntity.ok(userDTO);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Đã có lỗi xảy ra. Vui lòng thử lại sau!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

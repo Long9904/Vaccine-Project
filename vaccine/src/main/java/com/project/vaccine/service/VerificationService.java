@@ -18,6 +18,10 @@ import java.util.UUID;
 @Service
 public class VerificationService {
 
+    private final static int limitTimeSpawn = 5;
+    private final static String linkVerificationRegister
+            = "http://localhost:8080/api/verification/register/confirm?token=";
+
     @Autowired
     private VerificationRepository verificationRepository;
 
@@ -50,25 +54,25 @@ public class VerificationService {
 
     public String verifyToken(String token) {
         Verification verification = verificationRepository.findByTokenValue(token)
-                .orElseThrow(() -> new NotFoundException("Link xác minh không tồn tại!"));
+                .orElseThrow(() -> new NotFoundException("Token is not exist"));
 
         if (verification.getExpiredAt().isBefore(LocalDateTime.now())) {
-            return "Link xác minh đã hết hạn!";
+            return "Token is expired!";
         }
 
         User user = verification.getUser();
 
-        // Nếu tài khoản đã kích hoạt và không có email chờ xác nhận, không cần xác minh lại
+
         if (user.getStatus().equals(UserStatusEnum.ACTIVE) && user.getPendingEmail() == null) {
-            return "Tài khoản đã được kích hoạt!";
+            return "Account is already verified!";
         }
 
-        // Nếu user chưa kích hoạt -> kích hoạt tài khoản
+
         if (user.getStatus().equals(UserStatusEnum.INACTIVE)){
             user.setStatus(UserStatusEnum.ACTIVE);
         }
 
-        // Nếu user có pendingEmail -> đây là xác minh đổi email, cập nhật email mới
+
         if (user.getPendingEmail() != null) {
             user.setEmail(user.getPendingEmail());
             user.setPendingEmail(null);
@@ -77,46 +81,38 @@ public class VerificationService {
         authenticationRepository.save(user);
         verificationRepository.delete(verification);
 
-        return "Xác minh thành công!";
+        return "Account is verified!";
     }
 
 
-
-    /*
-      IMPORTANT NOTE: giới hạn là 5 lần gửi trong 30 phút
-     -Lần gửi email khi đăng ký. (lần đầu tiên sau khi nhấn verify)
-     -Lần gửi khi nhấn lại nút Verify.
-     -Lần gửi khi thay đổi email sau khi xác minh
-    */
 
     public String registerVerification(String email, String verificationMethod) {
         User user = authenticationRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         if (user.getStatus().equals(UserStatusEnum.ACTIVE)) {
-            return "Tài khoản đã được kích hoạt!";
+            return "Account is already verified!";
         }
 
         Verification verification = verificationRepository.findByUser(user)
-                .orElseThrow(() -> new NotFoundException("Bạn chưa yêu cầu xác minh!"));
+                .orElseThrow(() -> new NotFoundException("You have not requested verification!"));
 
         if(verification.getAttemptCount() > 0){
-            return "Bạn đã gửi yêu cầu xác minh!";
+            return "You have requested verification!";
         }
 
         if (verification.getExpiredAt().isBefore(LocalDateTime.now())) {
-            return "Link xác minh đã hết hạn!";
-        } // Nếu hết hạn, thì phải gọi api resend verify
+            return "Token is expired!";
+        } // If token is expired call resetVerification
 
         // Create link
-        String link = "http://localhost:8080/api/verification/register/confirm?token="
-                + verification.getTokenValue();
+        String link = linkVerificationRegister + verification.getTokenValue();
 
         // Send email
         try {
             emailService.sendVerificationEmail(email, "Verify email", link, verificationMethod);
         } catch (Exception e) {
-            return "Gửi email thất bại!";
+            return "Send email failed!";
         }
 
         verificationRepository.save(verification);
@@ -129,42 +125,40 @@ public class VerificationService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         Verification verification = verificationRepository.findByUser(user)
-                .orElseThrow(() -> new NotFoundException("Bạn chưa yêu cầu xác minh!"));
+                .orElseThrow(() -> new NotFoundException("You have not requested verification!"));
 
-
-        if (verification.getExpiredAt().isBefore(LocalDateTime.now())) {
-            verification.setExpiredAt(LocalDateTime.now().plusMinutes(15));
-            verification.setAttemptCount(0);
-        } // Nếu hết hạn, cập nhật lại thời gian hết hạn và reset số lần gửi
-
+        // If locked, return notify
         if (verification.getLockTime() != null && verification.getLockTime().isAfter(LocalDateTime.now())) {
-            return "Tài khoản đã bị khóa trong 30 phút!";
-        } // Nếu tài khoản bị khóa
-
-        if (verification.getAttemptCount() >= 5) {
-            // Lock user for 30 minutes
-            verification.setLockTime(LocalDateTime.now().plusMinutes(30));
-            verificationRepository.save(verification);
-            return "Bạn đã vượt quá số lần gửi trong 30 phút!";
-        } else {
-            verification.setAttemptCount(verification.getAttemptCount() + 1);
+            return "Your account is locked for 30 minutes!";
         }
 
+        // Reset attempt if account not be locked
+        verification.setAttemptCount(verification.getAttemptCount() + 1);
 
-        // Create link
-        String link = "http://localhost:8080/api/verification/register/confirm?token="
-                + verification.getTokenValue();
+        if (verification.getAttemptCount() >= limitTimeSpawn) {
+            verification.setLockTime(LocalDateTime.now().plusMinutes(30));
+            verificationRepository.save(verification);
+            return "You have reached the maximum number of attempts. Your account is locked for 30 minutes!";
+        } // Spawn verify
+
+        // Create new token if it don't have lock time
+        verification.setTokenValue(UUID.randomUUID().toString());
+        verification.setExpiredAt(LocalDateTime.now().plusMinutes(15));
+
+        // Create new token
+        String link = linkVerificationRegister + verification.getTokenValue();
 
         // Send email
         try {
             emailService.sendVerificationEmail(email, "Verify email", link, "REGISTER");
         } catch (Exception e) {
-            return "Gửi email thất bại!";
+            return "Send email fail";
         }
 
         verificationRepository.save(verification);
-        return "Xác minh đã được gửi lại!";
+        return "Email verification sent";
     }
+
 
     public void getAllToken(){
         verificationRepository.findAll();
