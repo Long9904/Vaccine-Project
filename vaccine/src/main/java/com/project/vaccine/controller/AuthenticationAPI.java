@@ -22,7 +22,7 @@ public class AuthenticationAPI {
     private AuthenticationService authenticationService;
 
 
-    // Admin, Staff, User
+    // All roles
     @PostMapping("/login")
     public ResponseEntity <?> login(@Valid @RequestBody LoginDTO loginDTO) {
         try {
@@ -34,14 +34,14 @@ public class AuthenticationAPI {
     }
 
 
-    // Admin, Staff, User
+    // All roles
     @PostMapping("/logout")
     public ResponseEntity <?> logout(@RequestParam String username) {
         return ResponseEntity.ok(Map.of("message", "Logout successfully"));
     }
 
 
-    // Admin, Staff, User
+    // All roles
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserDTO userDTO) {
         try {

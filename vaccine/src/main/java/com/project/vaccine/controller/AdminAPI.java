@@ -60,12 +60,4 @@ public class AdminAPI {
     }
 
 
-    @GetMapping("/staff")
-    public void getAllStaff() {
-
-    }
-
-
-
-
 }
