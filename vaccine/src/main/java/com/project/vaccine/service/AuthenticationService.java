@@ -40,16 +40,16 @@ public class AuthenticationService implements UserDetailsService {
         List<ErrorDetail> errors = new ArrayList<>();
 
         if (authenticationRepository.findByUsername(userDTO.getUsername()).isPresent()) {
-            errors.add(new ErrorDetail("username", "Username đã tồn tại"));
+            errors.add(new ErrorDetail("username", "Username is existence"));
         }
 
         if (authenticationRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            errors.add(new ErrorDetail("email", "Email đã tồn tại"));
+            errors.add(new ErrorDetail("email", "Email is existence"));
 
         }
 
         if (authenticationRepository.findByPhone(userDTO.getPhone()).isPresent()) {
-            errors.add(new ErrorDetail("phone", "Số điện thoại đã tồn tại"));
+            errors.add(new ErrorDetail("phone", "Phone number is existence"));
         }
 
         if (!errors.isEmpty()) {
@@ -73,21 +73,21 @@ public class AuthenticationService implements UserDetailsService {
         verificationService.createToken(user, VerificationEnum.REGISTER);
 
         // JWT token
-        return "Đăng ký thành công";
+        return "Register successfully";
     }
 
 
 
     public UserDTO login(String username, String password) {
         User user = authenticationRepository.findByUsername(username)
-                .orElseThrow(() -> new AuthenticationException("Username không đúng"));
+                .orElseThrow(() -> new AuthenticationException("Username is not correct"));
 
         if (!user.getPassword().equals(password)) {
-            throw new AuthenticationException("Password không đúng");
+            throw new AuthenticationException("Password is not correct");
         }
 
         if (user.getStatus().equals(UserStatusEnum.INACTIVE)) {
-            throw new AuthenticationException("Tài khoản chưa được kích hoạt");
+            throw new AuthenticationException("Account is not verified");
         }
 
         UserDTO userDTO = new UserDTO();
@@ -113,6 +113,6 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return authenticationRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("Username không tồn tại"));
+                .orElseThrow(() -> new NotFoundException("Username not found"));
     }
 }

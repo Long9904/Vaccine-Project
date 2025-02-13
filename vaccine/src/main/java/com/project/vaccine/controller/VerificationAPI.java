@@ -43,8 +43,8 @@ public class VerificationAPI {
 
 
     // Staff, User
-    @PostMapping("/register/reverify")
-    public ResponseEntity<String> resetVerification(@RequestBody String email) {
+    @GetMapping("/register/re-verify")
+    public ResponseEntity<String> resetVerification(@RequestParam String email) {
         try {
             String message = verificationService.resetVerification(email);
             return ResponseEntity.ok(message);
