@@ -7,10 +7,7 @@ import com.project.vaccine.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -26,10 +23,7 @@ public class AdminAPI {
     private VerificationService verificationService;
 
 
-    @PostMapping("/user")
-    public ResponseEntity<?> createUser() {
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "User created successfully"));
-    }
+
 
     @GetMapping("/user")
     public ResponseEntity<?> getAllUserProfiles() {
@@ -38,7 +32,7 @@ public class AdminAPI {
     }
 
 
-    @GetMapping("/user/search/{name}")
+    @GetMapping("/user/search")
     public void searchUserByName() {
 
     }
@@ -49,7 +43,7 @@ public class AdminAPI {
 
     }
 
-    @PostMapping("/user/update/{id}")
+    @PutMapping("/user/update/{id}")
     public void updateUser() {
 
     }

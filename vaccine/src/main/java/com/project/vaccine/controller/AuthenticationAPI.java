@@ -1,8 +1,9 @@
 package com.project.vaccine.controller;
 
 
-import com.project.vaccine.dto.LoginDTO;
-import com.project.vaccine.dto.UserDTO;
+import com.project.vaccine.dto.request.LoginRequest;
+import com.project.vaccine.dto.request.UserDTO;
+import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.exception.DuplicateException;
 import com.project.vaccine.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -24,20 +25,9 @@ public class AuthenticationAPI {
 
     // All roles
     @PostMapping("/login")
-    public ResponseEntity <?> login(@Valid @RequestBody LoginDTO loginDTO) {
-        try {
-            UserDTO userDTO = authenticationService.login(loginDTO.getUsername(), loginDTO.getPassword());
-            return ResponseEntity.ok(userDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
-
-
-    // All roles
-    @PostMapping("/logout")
-    public ResponseEntity <?> logout(@RequestParam String username) {
-        return ResponseEntity.ok(Map.of("message", "Logout successfully"));
+    public ResponseEntity <?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        LoginResponse loginResponse = authenticationService.login(loginRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }
 
 

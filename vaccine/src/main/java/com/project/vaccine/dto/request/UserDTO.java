@@ -1,4 +1,4 @@
-package com.project.vaccine.dto;
+package com.project.vaccine.dto.request;
 
 
 import jakarta.validation.constraints.*;
@@ -13,6 +13,8 @@ import java.time.Period;
 @Getter
 @Setter
 public class UserDTO {
+
+    private Long id = 0L;// default value for id,
 
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")
     private String username;

@@ -1,9 +1,10 @@
 package com.project.vaccine.service;
 
 
-import com.project.vaccine.dto.UserDTO;
+import com.project.vaccine.dto.request.LoginRequest;
+import com.project.vaccine.dto.request.UserDTO;
+import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.entity.User;
-import com.project.vaccine.enums.UserStatusEnum;
 import com.project.vaccine.enums.VerificationEnum;
 import com.project.vaccine.exception.AuthenticationException;
 import com.project.vaccine.exception.DuplicateException;
@@ -11,6 +12,8 @@ import com.project.vaccine.exception.ErrorDetail;
 import com.project.vaccine.exception.NotFoundException;
 import com.project.vaccine.repository.AuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,6 +35,12 @@ public class AuthenticationService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenService tokenService;
 
 
     public String register(UserDTO userDTO) {
@@ -70,48 +79,31 @@ public class AuthenticationService implements UserDetailsService {
 
         authenticationRepository.save(user);
         verificationService.createToken(user, VerificationEnum.REGISTER);
-
-        // JWT token
         return "Register successfully";
-    }
-
-
-
-    public UserDTO login(String username, String password) {
-        User user = authenticationRepository.findByUsername(username)
-                .orElseThrow(() -> new AuthenticationException("Username is not correct"));
-
-        if (!user.getPassword().equals(password)) {
-            throw new AuthenticationException("Password is not correct");
-        }
-
-        if (user.getStatus().equals(UserStatusEnum.INACTIVE)) {
-            throw new AuthenticationException("Account is not verified");
-        }
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(user.getUsername());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPhone(user.getPhone());
-        userDTO.setAddress(user.getAddress());
-        userDTO.setName(user.getName());
-        userDTO.setGender(user.getGender());
-        userDTO.setPassword(null);
-
-        //JWT token
-
-        return userDTO;
-    }
-
-
-    public void logout(String username) {
-        // remove session
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return authenticationRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("Username not found"));
+        return authenticationRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Username not found"));
+    }
+
+    public LoginResponse login(LoginRequest loginRequest) {
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            User user = authenticationRepository.findByUsername(loginRequest.getUsername()).orElseThrow(() -> new NotFoundException("Username not found"));
+            String token = tokenService.generateToken(user);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(token);
+            loginResponse.setRole(user.getRole());
+            loginResponse.setUsername(user.getUsername());
+            loginResponse.setName(user.getName());
+            loginResponse.setId(user.getId());
+            return loginResponse;
+
+        } catch (Exception e) {
+            throw new AuthenticationException("Username or password is incorrect");
+        }
     }
 }

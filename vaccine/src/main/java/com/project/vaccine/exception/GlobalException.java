@@ -53,4 +53,23 @@ public class GlobalException {
         ));
     }
 
+    // Xử lí lỗi not found
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                "message", "Not found error",
+                "errors", ex.getMessage()
+        ));
+    }
+
+    // Xử lí lỗi authentication
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthenticationException(AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                "message", "Authentication error",
+                "errors", ex.getMessage()
+        ));
+    }
 }
