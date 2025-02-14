@@ -31,6 +31,7 @@ public class VerificationService {
     @Autowired
     private EmailService emailService;
 
+
 /*
 *  Method getAllTokens is used to verify the token.
 *  If the token is valid, the user status = 1.
@@ -61,26 +62,16 @@ public class VerificationService {
         }
 
         User user = verification.getUser();
-
-
-        if (user.getStatus().equals(UserStatusEnum.ACTIVE) && user.getPendingEmail() == null) {
+        if (user.getStatus().equals(UserStatusEnum.ACTIVE)) {
             return "Account is already verified!";
         }
-
 
         if (user.getStatus().equals(UserStatusEnum.INACTIVE)){
             user.setStatus(UserStatusEnum.ACTIVE);
         }
 
-
-        if (user.getPendingEmail() != null) {
-            user.setEmail(user.getPendingEmail());
-            user.setPendingEmail(null);
-        }
-
         authenticationRepository.save(user);
         verificationRepository.delete(verification);
-
         return "Account is verified!";
     }
 

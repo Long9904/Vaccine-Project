@@ -41,7 +41,7 @@ public class AuthenticationAPI {
             throw e;
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "message", "Đã có lỗi xảy ra. Vui lòng thử lại sau!"
+                    "message", "Error, please try again later"
             ));
         }
     }
