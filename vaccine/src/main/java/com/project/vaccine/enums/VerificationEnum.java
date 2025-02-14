@@ -5,7 +5,5 @@ public enum VerificationEnum {
     LOGIN,
     RESET_PASSWORD,
     UPDATE_PASSWORD,
-    CHANGE_EMAIL, // change email when verifying
-    UPDATE_EMAIL, // update email when login
-    UPDATE_PHONE
+    UPDATE_EMAIL
 }
