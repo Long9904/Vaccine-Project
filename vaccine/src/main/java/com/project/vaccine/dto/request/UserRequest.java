@@ -12,7 +12,7 @@ import java.time.Period;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class UserRequest {
 
     private Long id = 0L;// default value for id,
 
@@ -44,8 +44,8 @@ public class UserDTO {
     @Past(message = "Invalid date of birth")
     private LocalDate dob;
 
-    // Custom validation @Valid // sủa lại cho dob
-    @AssertTrue(message = "Người dùng phải trên 18 tuổi")
+    // Custom validation
+    @AssertTrue(message = "You must be at least 18 years old to register")
     private boolean isAdult() {
         return dob != null && Period.between(dob, LocalDate.now()).getYears() >= 18;
     }

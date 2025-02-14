@@ -2,7 +2,7 @@ package com.project.vaccine.service;
 
 
 import com.project.vaccine.dto.request.LoginRequest;
-import com.project.vaccine.dto.request.UserDTO;
+import com.project.vaccine.dto.request.UserRequest;
 import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.enums.VerificationEnum;
@@ -43,20 +43,20 @@ public class AuthenticationService implements UserDetailsService {
     private TokenService tokenService;
 
 
-    public String register(UserDTO userDTO) {
+    public String register(UserRequest userRequest) {
         // Check duplicate
         List<ErrorDetail> errors = new ArrayList<>();
 
-        if (authenticationRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+        if (authenticationRepository.findByUsername(userRequest.getUsername()).isPresent()) {
             errors.add(new ErrorDetail("username", "Username already exists"));
         }
 
-        if (authenticationRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+        if (authenticationRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             errors.add(new ErrorDetail("email", "Email already exists"));
 
         }
 
-        if (authenticationRepository.findByPhone(userDTO.getPhone()).isPresent()) {
+        if (authenticationRepository.findByPhone(userRequest.getPhone()).isPresent()) {
             errors.add(new ErrorDetail("phone", "Phone number already exists"));
         }
 
@@ -66,14 +66,14 @@ public class AuthenticationService implements UserDetailsService {
 
         // Create new user
         User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setEmail(userDTO.getEmail());
-        user.setPhone(userDTO.getPhone());
-        user.setAddress(userDTO.getAddress());
-        user.setName(userDTO.getName());
-        user.setGender(userDTO.getGender());
-        user.setDob(userDTO.getDob());
+        user.setUsername(userRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setEmail(userRequest.getEmail());
+        user.setPhone(userRequest.getPhone());
+        user.setAddress(userRequest.getAddress());
+        user.setName(userRequest.getName());
+        user.setGender(userRequest.getGender());
+        user.setDob(userRequest.getDob());
         user.setDate_created(LocalDateTime.now());
         user.setPendingEmail(null);
 
