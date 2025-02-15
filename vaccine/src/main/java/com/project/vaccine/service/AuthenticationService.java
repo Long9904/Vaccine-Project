@@ -95,7 +95,7 @@ public class AuthenticationService implements UserDetailsService {
                     (new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
             User user = authenticationRepository.findByUsername(loginRequest.getUsername())
-                    .orElseThrow(() -> new NotFoundException("Username not found"));
+                    .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
             String token = tokenService.generateToken(user);
 

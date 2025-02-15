@@ -26,7 +26,7 @@ public class AuthenticationAPI {
     @PostMapping("/login")
     public ResponseEntity <?> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = authenticationService.login(loginRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", loginResponse));
+        return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }
 
 

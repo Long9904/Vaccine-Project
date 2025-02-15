@@ -25,14 +25,14 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    private  SecretKey getSecretKey() {
+    private SecretKey getSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
 
     }
 
 
-    public  String generateToken(User user) {
+    public String generateToken(User user) {
         return Jwts.builder()
                 .subject(user.getId()+"")
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -55,4 +55,30 @@ public class TokenService {
         return userDTO;
     }
 
+    public boolean isValidateToken(String token, UserDTO userDTO) {
+        long userId = extractUserId(token);
+        return userId == userDTO.getId();
+    }
+
+    public boolean isTokenExpired(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        Date expiration = claims.getExpiration();
+        return expiration.before(new Date());
+    }
+
+    public long extractUserId(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        String id = claims.getSubject();
+        return Long.parseLong(id);
+    }
+
 }
+

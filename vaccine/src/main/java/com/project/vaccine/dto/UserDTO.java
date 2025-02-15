@@ -12,7 +12,7 @@ import java.time.Period;
 @Setter
 public class UserDTO {
 
-    private Long id = 0L;// default value for id,
+    private long id = 0L;// default value for id,
 
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")
     private String username;
