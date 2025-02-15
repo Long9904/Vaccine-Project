@@ -1,6 +1,9 @@
 package com.project.vaccine.dto;
 
 
+import com.project.vaccine.enums.RoleEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -41,6 +44,9 @@ public class UserDTO {
     @NotNull(message = "Date of birth is required")
     @Past(message = "Invalid date of birth")
     private LocalDate dob;
+
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
 
     // Custom validation
     @AssertTrue(message = "You must be at least 18 years old to register")

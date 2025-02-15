@@ -89,6 +89,7 @@ public class AuthenticationService implements UserDetailsService {
         return authenticationRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Username not found"));
     }
 
+
     public LoginResponse login(LoginRequest loginRequest) {
         try {
             authenticationManager.authenticate
