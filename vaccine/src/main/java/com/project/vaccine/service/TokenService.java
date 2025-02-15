@@ -1,6 +1,6 @@
 package com.project.vaccine.service;
 
-import com.project.vaccine.dto.request.UserRequest;
+import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.exception.NotFoundException;
 import com.project.vaccine.repository.UserRepository;
@@ -17,13 +17,13 @@ import java.util.Date;
 @Service
 public class TokenService {
 
-    private final static long EXPIRATION_TIME = 1000 * 30; // 30s for test // 1000 * 60 * 60 * 24
+    private final static long EXPIRATION_TIME = 1000 * 60 * 60 * 2; // 2 hours
 
     @Autowired
     private UserRepository userRepository;
 
     @Value("${jwt.secret}")
-    private  String SECRET_KEY;
+    private String SECRET_KEY;
 
     private  SecretKey getSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -41,7 +41,7 @@ public class TokenService {
                 .compact();
     }
 
-    public UserRequest getUserFromToken(String token) {
+    public UserDTO getUserFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
@@ -50,9 +50,9 @@ public class TokenService {
         String id = claims.getSubject();
         Long userId = Long.parseLong(id);
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
-        UserRequest userRequest = new UserRequest();
-        userRequest.setId(user.getId());
-        return userRequest;
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        return userDTO;
     }
 
 }

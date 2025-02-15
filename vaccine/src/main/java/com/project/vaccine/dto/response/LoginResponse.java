@@ -17,10 +17,6 @@ public class LoginResponse {
 
     private Long id;
 
-    private String username;
-
-    private String name;
-
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 

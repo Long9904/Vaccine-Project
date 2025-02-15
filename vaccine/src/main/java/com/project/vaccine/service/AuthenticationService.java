@@ -2,7 +2,7 @@ package com.project.vaccine.service;
 
 
 import com.project.vaccine.dto.request.LoginRequest;
-import com.project.vaccine.dto.request.UserRequest;
+import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.enums.VerificationEnum;
@@ -43,20 +43,20 @@ public class AuthenticationService implements UserDetailsService {
     private TokenService tokenService;
 
 
-    public String register(UserRequest userRequest) {
+    public String register(UserDTO userDTO) {
         // Check duplicate
         List<ErrorDetail> errors = new ArrayList<>();
 
-        if (authenticationRepository.findByUsername(userRequest.getUsername()).isPresent()) {
+        if (authenticationRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             errors.add(new ErrorDetail("username", "Username already exists"));
         }
 
-        if (authenticationRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+        if (authenticationRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             errors.add(new ErrorDetail("email", "Email already exists"));
 
         }
 
-        if (authenticationRepository.findByPhone(userRequest.getPhone()).isPresent()) {
+        if (authenticationRepository.findByPhone(userDTO.getPhone()).isPresent()) {
             errors.add(new ErrorDetail("phone", "Phone number already exists"));
         }
 
@@ -66,14 +66,15 @@ public class AuthenticationService implements UserDetailsService {
 
         // Create new user
         User user = new User();
-        user.setUsername(userRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        user.setEmail(userRequest.getEmail());
-        user.setPhone(userRequest.getPhone());
-        user.setAddress(userRequest.getAddress());
-        user.setName(userRequest.getName());
-        user.setGender(userRequest.getGender());
-        user.setDob(userRequest.getDob());
+
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setEmail(userDTO.getEmail());
+        user.setPhone(userDTO.getPhone());
+        user.setAddress(userDTO.getAddress());
+        user.setName(userDTO.getName());
+        user.setGender(userDTO.getGender());
+        user.setDob(userDTO.getDob());
         user.setDate_created(LocalDateTime.now());
         user.setPendingEmail(null);
 
@@ -89,17 +90,19 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-            User user = authenticationRepository.findByUsername(loginRequest.getUsername()).orElseThrow(() -> new NotFoundException("Username not found"));
+            authenticationManager.authenticate
+                    (new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+            User user = authenticationRepository.findByUsername(loginRequest.getUsername())
+                    .orElseThrow(() -> new NotFoundException("Username not found"));
+
             String token = tokenService.generateToken(user);
+
             LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setId(user.getId());
             loginResponse.setToken(token);
             loginResponse.setRole(user.getRole());
-            loginResponse.setUsername(user.getUsername());
-            loginResponse.setName(user.getName());
-            loginResponse.setId(user.getId());
             return loginResponse;
 
         } catch (Exception e) {

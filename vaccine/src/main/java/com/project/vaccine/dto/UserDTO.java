@@ -1,4 +1,4 @@
-package com.project.vaccine.dto.request;
+package com.project.vaccine.dto;
 
 
 import jakarta.validation.constraints.*;
@@ -7,12 +7,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.Period;
 
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
+public class UserDTO {
 
     private Long id = 0L;// default value for id,
 
