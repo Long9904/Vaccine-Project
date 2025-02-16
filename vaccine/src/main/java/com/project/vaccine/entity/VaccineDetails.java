@@ -1,9 +1,6 @@
 package com.project.vaccine.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,7 +31,9 @@ public class VaccineDetails {
     private LocalDateTime update_At;
 
 
-    private Long vaccine_id;
+    @ManyToOne
+    @JoinColumn(name = "vaccine_id", nullable = false, referencedColumnName = "id")
+    private Vaccine vaccine;
 
     @Min(value = 0,message = "Price must be at least 0")
     private double price;

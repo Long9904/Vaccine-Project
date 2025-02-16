@@ -1,9 +1,6 @@
 package com.project.vaccine.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -46,4 +45,8 @@ public class Vaccine {
     @Min(value = 0,message = "Age must be at least 0 months age")
     @Max(value = 72,message = "Age must be at most 72 months age")
     private int max_age;
+
+
+    @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VaccineDetails> vaccineDetails = new ArrayList<>();
 }
