@@ -26,6 +26,8 @@ public class AuthenticationAPI {
     @PostMapping("/login")
     public ResponseEntity <?> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = authenticationService.login(loginRequest);
+
+
         return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }
 
@@ -44,6 +46,19 @@ public class AuthenticationAPI {
         }
     }
 
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        return ResponseEntity.ok(authenticationService.refreshToken(refreshToken));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        authenticationService.logout(refreshToken);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Logout successful"));
+    }
 
 
 }

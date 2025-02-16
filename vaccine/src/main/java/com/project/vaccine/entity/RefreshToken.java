@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 
@@ -28,10 +29,6 @@ public class RefreshToken {
     private String token;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private Instant expiryDate;
 
-    @Column(nullable = false)
-    private LocalDateTime expiredAt;
-
-    private boolean revoked; // if true, token cannot be used
 }

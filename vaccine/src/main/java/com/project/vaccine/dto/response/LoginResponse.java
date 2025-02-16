@@ -17,6 +17,8 @@ public class LoginResponse {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    private String token;
+    private String accessToken;
+
+    private String refreshToken;
 
 }

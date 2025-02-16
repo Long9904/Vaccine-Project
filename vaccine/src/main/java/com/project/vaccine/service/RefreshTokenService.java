@@ -5,13 +5,14 @@ import com.project.vaccine.entity.User;
 import com.project.vaccine.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 public class RefreshTokenService {
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.refresh.expiration}")
     private Long refreshTokenExpiration;
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -24,9 +25,7 @@ public class RefreshTokenService {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setCreatedAt(LocalDateTime.now());
-        refreshToken.setExpiredAt(LocalDateTime.now().plusDays(refreshTokenExpiration));
-        refreshToken.setRevoked(false);
+        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenExpiration));
         return refreshTokenRepository.save(refreshToken);
     }
 
@@ -35,18 +34,11 @@ public class RefreshTokenService {
     }
 
     // check if a refresh token is valid
-    public boolean isValid(RefreshToken refreshToken) {
-        return !refreshToken.isRevoked() && refreshToken.getExpiredAt().isAfter(LocalDateTime.now());
+    public boolean isValid(RefreshToken token) {
+        return token.getExpiryDate().isAfter(Instant.now());
     }
 
-    // set the revoked flag to true to revoke a refresh token
-    public void revokeToken(RefreshToken refreshToken) {
-        refreshToken.setRevoked(true);
-        refreshTokenRepository.save(refreshToken);
-    }
-
-    // delete all refresh tokens for a user when they log out
-    public void deleteByUser(User user) {
-        refreshTokenRepository.deleteByUser(user);
+    public void deleteByToken(String token) {
+        refreshTokenRepository.findByToken(token).ifPresent(refreshTokenRepository::delete);
     }
 }

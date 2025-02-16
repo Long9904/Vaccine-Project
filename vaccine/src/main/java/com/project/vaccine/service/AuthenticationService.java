@@ -4,6 +4,7 @@ package com.project.vaccine.service;
 import com.project.vaccine.dto.request.LoginRequest;
 import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.dto.response.LoginResponse;
+import com.project.vaccine.entity.RefreshToken;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.enums.VerificationEnum;
 import com.project.vaccine.exception.AuthenticationException;
@@ -42,6 +43,8 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     public String register(UserDTO userDTO) {
         // Check duplicate
@@ -98,15 +101,40 @@ public class AuthenticationService implements UserDetailsService {
             User user = authenticationRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-            String token = tokenService.generateToken(user);
+            String token = tokenService.generateAccessToken(user);
 
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setToken(token);
+            loginResponse.setAccessToken(token);
             loginResponse.setRole(user.getRole());
+
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+            loginResponse.setRefreshToken(refreshToken.getToken());
+
             return loginResponse;
 
         } catch (Exception e) {
             throw new AuthenticationException("Username or password is incorrect");
         }
     }
+
+    public void logout(String refreshToken) {
+        refreshTokenService.deleteByToken(refreshToken);
+    }
+
+
+    public LoginResponse refreshToken(String refreshToken) {
+        RefreshToken token = refreshTokenService.findByToken(refreshToken)
+                .orElseThrow(() -> new AuthenticationException("Invalid refresh token"));
+
+        if (!refreshTokenService.isValid(token)) {
+            throw new AuthenticationException("Refresh token expired. Please login again");
+        }
+
+        User user = token.getUser();
+        String newAccessToken = tokenService.generateAccessToken(user);
+        return new LoginResponse(user.getRole(), refreshToken, newAccessToken);
+    }
+
+
+
 }

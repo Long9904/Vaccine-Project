@@ -3,6 +3,7 @@ package com.project.vaccine.service;
 import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.exception.NotFoundException;
+import com.project.vaccine.repository.RefreshTokenRepository;
 import com.project.vaccine.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -23,6 +24,9 @@ public class TokenService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
+
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
@@ -32,8 +36,7 @@ public class TokenService {
 
     }
 
-
-    public String generateToken(User user) {
+    public String generateAccessToken(User user) {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .claim("role", user.getRole())
@@ -79,6 +82,5 @@ public class TokenService {
                 .getPayload();
         return claims.getSubject();
     }
-
 }
 
