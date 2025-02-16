@@ -38,27 +38,34 @@ public class Filter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader("Authorization");
         String token = null;
 
-
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
-        }
-        try{
+        }// token is null or not start with Bearer
+
+        try {
             token = authorizationHeader.substring(7);
             UserDTO userDTO = tokenService.getUserFromToken(token);
 
-            if(tokenService.isValidateToken(token, userDTO) && !tokenService.isTokenExpired(token)){
-               UserDetails userDetails = User.builder()
-                       .username(userDTO.getUsername())
-                       .password("")
-                       .roles(userDTO.getRole().toString())
-                       .build();
+            if (tokenService.isValidateToken(token, userDTO)
+                    && !tokenService.isTokenExpired(token)
+                    && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-               UsernamePasswordAuthenticationToken authentication =
+                UserDetails userDetails = User.builder()
+                        .username(userDTO.getId()+"") // use userId as username
+                        .password("")
+                        .roles(userDTO.getRole().toString())
+                        .build();
+
+                UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-               authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-               SecurityContextHolder.getContext().setAuthentication(authentication);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             } // set authentication
+            else if (tokenService.isTokenExpired(token)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
+                return;
+            }
 
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
