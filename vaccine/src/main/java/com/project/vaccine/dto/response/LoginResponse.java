@@ -14,9 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LoginResponse {
 
-
-    private long id;
-
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 

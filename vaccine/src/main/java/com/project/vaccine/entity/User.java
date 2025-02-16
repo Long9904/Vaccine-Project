@@ -28,7 +28,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto increment ID
-    private long id;
+    private Long id;
 
     @Column(unique = true)
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")

@@ -52,7 +52,7 @@ public class Filter extends OncePerRequestFilter {
                     && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 UserDetails userDetails = User.builder()
-                        .username(userDTO.getId()+"") // use userId as username
+                        .username(userDTO.getUsername())
                         .password("")
                         .roles(userDTO.getRole().toString())
                         .build();
@@ -72,10 +72,7 @@ public class Filter extends OncePerRequestFilter {
             return;
         }
 
-
         filterChain.doFilter(request, response);
-
     }
-
 
 }

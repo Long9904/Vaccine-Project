@@ -17,7 +17,8 @@ import java.util.Date;
 @Service
 public class TokenService {
 
-    private final static long EXPIRATION_TIME = 1000 * 60 * 60 * 2; // 2 hours
+    @Value("${jwt.expiration}")
+    private Long EXPIRATION_TIME;
 
     @Autowired
     private UserRepository userRepository;
@@ -34,7 +35,7 @@ public class TokenService {
 
     public String generateToken(User user) {
         return Jwts.builder()
-                .subject(user.getId()+"")
+                .subject(user.getUsername())
                 .claim("role", user.getRole())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -48,17 +49,16 @@ public class TokenService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        String id = claims.getSubject();
-        Long userId = Long.parseLong(id);
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        String username = claims.getSubject();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
         return userDTO;
     }
 
     public boolean isValidateToken(String token, UserDTO userDTO) {
-        long userId = extractUserId(token);
-        return userId == userDTO.getId();
+        String username = extractUsername(token);
+        return username.equals(userDTO.getUsername());
     }
 
     public boolean isTokenExpired(String token) {
@@ -71,14 +71,13 @@ public class TokenService {
         return expiration.before(new Date());
     }
 
-    public long extractUserId(String token) {
+    public String extractUsername(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        String id = claims.getSubject();
-        return Long.parseLong(id);
+        return claims.getSubject();
     }
 
 }

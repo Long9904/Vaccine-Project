@@ -101,7 +101,6 @@ public class AuthenticationService implements UserDetailsService {
             String token = tokenService.generateToken(user);
 
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setId(user.getId());
             loginResponse.setToken(token);
             loginResponse.setRole(user.getRole());
             return loginResponse;

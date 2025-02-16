@@ -25,8 +25,8 @@ public class UserService {
     }
 
     public UserDTO getUserFromToken(UserDetails userDetails) {
-        long userId = Long.parseLong(userDetails.getUsername());
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
 
         UserDTO userDTO = new UserDTO();
         userDTO.setName(user.getName());
