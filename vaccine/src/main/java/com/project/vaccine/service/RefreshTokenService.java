@@ -4,12 +4,12 @@ import com.project.vaccine.entity.RefreshToken;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.stereotype.Service;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class RefreshTokenService {
 
     @Value("${jwt.refresh.expiration}")

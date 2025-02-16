@@ -22,9 +22,6 @@ public class AdminAPI {
     @Autowired
     private VerificationService verificationService;
 
-
-
-
     @GetMapping("/user")
     public ResponseEntity<?> getAllUserProfiles() {
             List<User> users = userService.getAllUsers();
