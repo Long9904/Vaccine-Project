@@ -41,7 +41,7 @@ public class AuthenticationAPI {
             throw e;
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
-                    "message", "Error, please try again later"
+                    "message", e.getMessage()
             ));
         }
     }
@@ -61,13 +61,13 @@ public class AuthenticationAPI {
     }
 
 
-//    @GetMapping
-//    public ResponseEntity<?> testLogin(@RequestParam String token) {
-//        if(authenticationService.testLogin(token)) {
-//            return ResponseEntity.ok(Map.of("message", "Login successful"));
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Login failed"));
-//        }
-//    }
+    @GetMapping
+    public ResponseEntity<?> testLogin(@RequestParam String token) {
+        if(authenticationService.testLogin(token)) {
+            return ResponseEntity.ok(Map.of("message", "Login successful"));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Login failed"));
+        }
+    }
 
 }

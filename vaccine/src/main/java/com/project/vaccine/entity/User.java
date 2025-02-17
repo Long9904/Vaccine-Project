@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(unique = true)
-    @Pattern(regexp = "^[\\w.-]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Invalid email")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W_]).{8,}$", message = "Invalid email")
     private String email;
 
 
