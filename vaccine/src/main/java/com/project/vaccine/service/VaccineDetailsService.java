@@ -35,4 +35,22 @@ public class VaccineDetailsService {
         vaccineDetails.setVaccine(vaccine);
         return vaccineDetailsRepository.save(vaccineDetails);
     }
+
+    public VaccineDetails delete(Long id) {
+        VaccineDetails newVacineDetails = vaccineDetailsRepository.findVaccineDetailsById(id);
+        newVacineDetails.setStatus(false);
+        return vaccineDetailsRepository.save(newVacineDetails);
+    }
+
+    public VaccineDetails update(Long id,VaccineDetailsDTO vaccineDetailsDTO) {
+        VaccineDetails newVacineDetails = vaccineDetailsRepository.findVaccineDetailsById(id);
+        newVacineDetails.setDose_number(vaccineDetailsDTO.getDose_number());
+        newVacineDetails.setDate_after(vaccineDetailsDTO.getDate_after());
+        newVacineDetails.setStatus(vaccineDetailsDTO.isStatus());
+        newVacineDetails.setCreate_At(vaccineDetailsDTO.getCreate_At());
+        newVacineDetails.setUpdate_At(vaccineDetailsDTO.getUpdate_At());
+        newVacineDetails.setPrice(vaccineDetailsDTO.getPrice());
+        newVacineDetails.setVaccine(newVacineDetails.getVaccine());
+        return vaccineDetailsRepository.save(newVacineDetails);
+    }
 }

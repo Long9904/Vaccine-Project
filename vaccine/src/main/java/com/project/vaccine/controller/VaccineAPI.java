@@ -24,4 +24,16 @@ public class VaccineAPI {
         Vaccine newVaccine = vaccineService.create(vaccine);
         return ResponseEntity.ok(newVaccine);
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteVaccine(@PathVariable Long id) {
+        Vaccine vaccine=vaccineService.delete(id);
+        return ResponseEntity.ok(vaccine);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity updateVaccine(@PathVariable Long id,@Valid @RequestBody VaccineDTO vaccine) {
+        Vaccine updateVaccine = vaccineService.update(id,vaccine);
+        return ResponseEntity.ok(updateVaccine);
+    }
 }

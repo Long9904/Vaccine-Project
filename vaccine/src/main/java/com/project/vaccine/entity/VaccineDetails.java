@@ -23,7 +23,8 @@ public class VaccineDetails {
     @Min(value = 1,message = "Dose number must be at least 1")
     private int dose_number;
 
-    private LocalDateTime date_after;
+    @Min(value = 0,message = "Date after must be at least 0")
+    private int date_after;
 
     private  boolean status = true;
 

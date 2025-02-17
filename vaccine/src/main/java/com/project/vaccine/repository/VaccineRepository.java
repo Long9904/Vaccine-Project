@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface VaccineRepository extends JpaRepository<Vaccine, Long> {
     List<Vaccine> findVaccinesByStatusTrue();
+    Vaccine findVaccineById(long id);
 }
