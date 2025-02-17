@@ -6,6 +6,7 @@ import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.entity.RefreshToken;
 import com.project.vaccine.entity.User;
+import com.project.vaccine.enums.RoleEnum;
 import com.project.vaccine.enums.VerificationEnum;
 import com.project.vaccine.exception.AuthenticationException;
 import com.project.vaccine.exception.DuplicateException;
@@ -79,6 +80,7 @@ public class AuthenticationService implements UserDetailsService {
         user.setGender(userDTO.getGender());
         user.setDob(userDTO.getDob());
         user.setDate_created(LocalDateTime.now());
+        user.setRole(RoleEnum.USER);
         user.setPendingEmail(null);
 
         authenticationRepository.save(user);
@@ -136,5 +138,12 @@ public class AuthenticationService implements UserDetailsService {
     }
 
 
+//    public boolean testLogin(String token) {
+//        if (!tokenService.isTokenExpired(token)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
 }

@@ -61,4 +61,13 @@ public class AuthenticationAPI {
     }
 
 
+//    @GetMapping
+//    public ResponseEntity<?> testLogin(@RequestParam String token) {
+//        if(authenticationService.testLogin(token)) {
+//            return ResponseEntity.ok(Map.of("message", "Login successful"));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Login failed"));
+//        }
+//    }
+
 }

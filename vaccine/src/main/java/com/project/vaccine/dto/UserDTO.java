@@ -46,7 +46,7 @@ public class UserDTO {
     private LocalDate dob;
 
     @Enumerated(EnumType.STRING)
-    private RoleEnum role;
+    private RoleEnum role = RoleEnum.USER;
 
     // Custom validation
     @AssertTrue(message = "You must be at least 18 years old to register")

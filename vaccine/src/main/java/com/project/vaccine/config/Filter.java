@@ -63,7 +63,7 @@ public class Filter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } // set authentication
             else if (tokenService.isTokenExpired(token)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired. Need to access again");
                 return;
             }
 
