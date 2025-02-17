@@ -25,8 +25,8 @@ public class VaccineService {
         vaccine.setQuantity(vaccineDTO.getQuantity());
         vaccine.setCreate_At(vaccineDTO.getCreate_At());
         vaccine.setUpdate_At(vaccineDTO.getUpdate_At());
-        vaccine.setMin_age(vaccineDTO.getMin_age());
-        vaccine.setMax_age(vaccineDTO.getMax_age());
+//        vaccine.setMin_age(vaccineDTO.getMin_age());
+//        vaccine.setMax_age(vaccineDTO.getMax_age());
         return vaccineRepository.save(vaccine);
     }
 
@@ -46,8 +46,8 @@ public class VaccineService {
         newVaccine.setQuantity(vaccine.getQuantity());
         newVaccine.setCreate_At(vaccine.getCreate_At());
         newVaccine.setUpdate_At(vaccine.getUpdate_At());
-        newVaccine.setMin_age(vaccine.getMin_age());
-        newVaccine.setMax_age(vaccine.getMax_age());
+//        newVaccine.setMin_age(vaccine.getMin_age());
+//        newVaccine.setMax_age(vaccine.getMax_age());
 
         return vaccineRepository.save(newVaccine);
     }

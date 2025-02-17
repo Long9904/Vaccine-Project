@@ -39,13 +39,13 @@ public class Vaccine {
 
     private LocalDateTime update_At;
 
-    @Min(value = 0,message = "Age must be at least 0 months age")
-    @Max(value = 72,message = "Age must be at most 72 months age")
-    private int min_age;
-
-    @Min(value = 0,message = "Age must be at least 0 months age")
-    @Max(value = 72,message = "Age must be at most 72 months age")
-    private int max_age;
+//    @Min(value = 0,message = "Age must be at least 0 months age")
+//    @Max(value = 72,message = "Age must be at most 72 months age")
+//    private int min_age;
+//
+//    @Min(value = 0,message = "Age must be at least 0 months age")
+//    @Max(value = 72,message = "Age must be at most 72 months age")
+//    private int max_age;
 
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
