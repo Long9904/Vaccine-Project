@@ -1,5 +1,6 @@
 package com.project.vaccine.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -48,5 +49,8 @@ public class Vaccine {
 
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<VaccineDetails> vaccineDetails = new ArrayList<>();
+
+
 }
