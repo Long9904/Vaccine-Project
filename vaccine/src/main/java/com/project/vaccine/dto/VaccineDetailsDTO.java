@@ -18,12 +18,6 @@ public class VaccineDetailsDTO {
     @Min(value = 0, message = "Date After must be at least 0")
     private int date_after;
 
-    private boolean status = true;
-
-    private LocalDateTime create_At;
-
-    private LocalDateTime update_At;
-
     @Min(value = 0, message = "Price must be at least 0")
     private double price;
 

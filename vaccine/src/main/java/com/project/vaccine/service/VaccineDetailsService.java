@@ -8,6 +8,7 @@ import com.project.vaccine.repository.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,9 +29,9 @@ public class VaccineDetailsService {
         VaccineDetails vaccineDetails = new VaccineDetails();
         vaccineDetails.setDose_number(vaccineDetailsDTO.getDose_number());
         vaccineDetails.setDate_after(vaccineDetailsDTO.getDate_after());
-        vaccineDetails.setStatus(vaccineDetailsDTO.isStatus());
-        vaccineDetails.setCreate_At(vaccineDetailsDTO.getCreate_At());
-        vaccineDetails.setUpdate_At(vaccineDetailsDTO.getUpdate_At());
+        vaccineDetails.setStatus(true);
+        vaccineDetails.setCreate_At(LocalDateTime.now());
+        vaccineDetails.setUpdate_At(LocalDateTime.now());
         vaccineDetails.setPrice(vaccineDetailsDTO.getPrice());
         vaccineDetails.setVaccine(vaccine);
         return vaccineDetailsRepository.save(vaccineDetails);
@@ -46,9 +47,7 @@ public class VaccineDetailsService {
         VaccineDetails newVacineDetails = vaccineDetailsRepository.findVaccineDetailsById(id);
         newVacineDetails.setDose_number(vaccineDetailsDTO.getDose_number());
         newVacineDetails.setDate_after(vaccineDetailsDTO.getDate_after());
-        newVacineDetails.setStatus(vaccineDetailsDTO.isStatus());
-        newVacineDetails.setCreate_At(vaccineDetailsDTO.getCreate_At());
-        newVacineDetails.setUpdate_At(vaccineDetailsDTO.getUpdate_At());
+        newVacineDetails.setUpdate_At(LocalDateTime.now());
         newVacineDetails.setPrice(vaccineDetailsDTO.getPrice());
         newVacineDetails.setVaccine(newVacineDetails.getVaccine());
         return vaccineDetailsRepository.save(newVacineDetails);

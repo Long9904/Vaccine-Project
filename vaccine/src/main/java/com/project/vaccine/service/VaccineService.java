@@ -6,6 +6,7 @@ import com.project.vaccine.repository.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,10 +22,10 @@ public class VaccineService {
         Vaccine vaccine = new Vaccine();
         vaccine.setName(vaccineDTO.getName());
         vaccine.setDescription(vaccineDTO.getDescription());
-        vaccine.setStatus(vaccineDTO.isStatus());
+        vaccine.setStatus(true);
         vaccine.setQuantity(vaccineDTO.getQuantity());
-        vaccine.setCreate_At(vaccineDTO.getCreate_At());
-        vaccine.setUpdate_At(vaccineDTO.getUpdate_At());
+        vaccine.setCreate_At(LocalDateTime.now());
+        vaccine.setUpdate_At(LocalDateTime.now());
 //        vaccine.setMin_age(vaccineDTO.getMin_age());
 //        vaccine.setMax_age(vaccineDTO.getMax_age());
         return vaccineRepository.save(vaccine);
@@ -42,10 +43,8 @@ public class VaccineService {
 
         newVaccine.setName(vaccine.getName());
         newVaccine.setDescription(vaccine.getDescription());
-        newVaccine.setStatus(vaccine.isStatus());
         newVaccine.setQuantity(vaccine.getQuantity());
-        newVaccine.setCreate_At(vaccine.getCreate_At());
-        newVaccine.setUpdate_At(vaccine.getUpdate_At());
+        newVaccine.setUpdate_At(LocalDateTime.now());
 //        newVaccine.setMin_age(vaccine.getMin_age());
 //        newVaccine.setMax_age(vaccine.getMax_age());
 
