@@ -1,5 +1,6 @@
 package com.project.vaccine.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -30,11 +31,12 @@ public class VaccineDetails {
 
     private LocalDateTime update_At;
 
-
     @ManyToOne
     @JoinColumn(name = "vaccine_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private Vaccine vaccine;
 
     @Min(value = 0,message = "Price must be at least 0")
     private double price;
+
 }
