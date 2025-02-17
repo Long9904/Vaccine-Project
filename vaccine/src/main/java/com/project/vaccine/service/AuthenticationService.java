@@ -134,16 +134,16 @@ public class AuthenticationService implements UserDetailsService {
 
         User user = token.getUser();
         String newAccessToken = tokenService.generateAccessToken(user);
-        return new LoginResponse(user.getRole(), refreshToken, newAccessToken);
+        return new LoginResponse(user.getRole(),  newAccessToken, refreshToken);
     }
 
 
-//    public boolean testLogin(String token) {
-//        if (!tokenService.isTokenExpired(token)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+    public boolean testLogin(String token) {
+        if (!tokenService.isTokenExpired(token)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
