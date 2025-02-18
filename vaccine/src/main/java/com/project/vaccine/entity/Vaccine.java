@@ -24,6 +24,7 @@ public class Vaccine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -38,15 +39,6 @@ public class Vaccine {
     private LocalDateTime create_At;
 
     private LocalDateTime update_At;
-
-//    @Min(value = 0,message = "Age must be at least 0 months age")
-//    @Max(value = 72,message = "Age must be at most 72 months age")
-//    private int min_age;
-//
-//    @Min(value = 0,message = "Age must be at least 0 months age")
-//    @Max(value = 72,message = "Age must be at most 72 months age")
-//    private int max_age;
-
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

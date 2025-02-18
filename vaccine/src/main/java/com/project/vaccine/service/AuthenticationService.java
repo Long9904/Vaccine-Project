@@ -84,7 +84,6 @@ public class AuthenticationService implements UserDetailsService {
         user.setPendingEmail(null);
 
         authenticationRepository.save(user);
-        verificationService.createToken(user, VerificationEnum.REGISTER);
         return "Register successfully";
     }
 
