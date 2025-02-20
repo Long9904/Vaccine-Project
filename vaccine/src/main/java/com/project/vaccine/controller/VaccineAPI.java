@@ -3,37 +3,40 @@ package com.project.vaccine.controller;
 import com.project.vaccine.dto.VaccineDTO;
 import com.project.vaccine.entity.Vaccine;
 import com.project.vaccine.service.VaccineService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RestController()
-@RequestMapping("/api/vaccine")
+@RestController("api/vaccine")
+@SecurityRequirement(name = "api")
+@CrossOrigin("*")
 public class VaccineAPI {
-    @Autowired
-    VaccineService vaccineService;
 
-    @GetMapping
-    public ResponseEntity getAllVaccine() {
-        return ResponseEntity.ok(vaccineService.getAllVaccine());
-    }
+    @Autowired
+    private VaccineService vaccineService;
 
     @PostMapping
-    public ResponseEntity createVaccine(@Valid @RequestBody VaccineDTO vaccine) {
-        Vaccine newVaccine = vaccineService.create(vaccine);
-        return ResponseEntity.ok(newVaccine);
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseEntity deleteVaccine(@PathVariable Long id) {
-        Vaccine vaccine=vaccineService.delete(id);
+    public ResponseEntity<?> createVaccine(@Valid @RequestBody VaccineDTO vaccineDTO) {
+        Vaccine vaccine = vaccineService.createVaccine(vaccineDTO);
         return ResponseEntity.ok(vaccine);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity updateVaccine(@PathVariable Long id,@Valid @RequestBody VaccineDTO vaccine) {
-        Vaccine updateVaccine = vaccineService.update(id,vaccine);
-        return ResponseEntity.ok(updateVaccine);
+    @GetMapping
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> getVaccines() {
+        return ResponseEntity.ok(vaccineService.getAllVaccines());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getVaccineById(@PathVariable Long id) {
+        return ResponseEntity.ok(vaccineService.getVaccineById(id));
+    }
+
+    @GetMapping("/{id}/details/{detailsId}")
+    public ResponseEntity<?> getVaccineDetailsById(@PathVariable Long id, @PathVariable Long detailsId) {
+        return ResponseEntity.ok(vaccineService.getVaccineDetailsById(id, detailsId));
     }
 }
