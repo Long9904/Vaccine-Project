@@ -5,7 +5,6 @@ import com.project.vaccine.dto.VaccineDetailsDTO;
 import com.project.vaccine.entity.Vaccine;
 import com.project.vaccine.entity.VaccineDetails;
 import com.project.vaccine.exception.DuplicateException;
-import com.project.vaccine.exception.ErrorDetail;
 import com.project.vaccine.repository.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +21,8 @@ public class VaccineService {
 
     public Vaccine createVaccine(VaccineDTO vaccineDTO) {
 
-        List<ErrorDetail> errors = new ArrayList<>();
-
         if(vaccineRepository.findByName(vaccineDTO.getName()).isPresent()) {
-            errors.add(new ErrorDetail("name", "Name already exists"));
-        }
-
-        if(!errors.isEmpty()) {
-            throw new DuplicateException(errors);
+            throw new DuplicateException("Vaccine name already exists");
         }
 
         Vaccine vaccine = new Vaccine();
@@ -62,5 +55,20 @@ public class VaccineService {
 
     public List<Vaccine> getAllVaccines() {
         return vaccineRepository.findAll();
+    }
+
+    public Vaccine getVaccineById(Long id) {
+        return vaccineRepository.findById(id).orElse(null);
+    }
+
+
+    public VaccineDetails getVaccineDetailsById(Long id, Long detailsId) {
+        Vaccine vaccine = vaccineRepository.findById(id).orElse(null);
+        if(vaccine == null) {
+            return null;
+        }
+        return vaccine.getVaccineDetails().
+                stream().
+                filter(vaccineDetails -> vaccineDetails.getId().equals(detailsId)).findFirst().orElse(null);
     }
 }

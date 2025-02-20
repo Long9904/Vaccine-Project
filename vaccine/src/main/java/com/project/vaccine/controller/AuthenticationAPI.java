@@ -1,8 +1,8 @@
 package com.project.vaccine.controller;
 
 
+import com.project.vaccine.dto.request.RegisterRequest;
 import com.project.vaccine.dto.request.LoginRequest;
-import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.exception.DuplicateException;
 import com.project.vaccine.service.AuthenticationService;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController
@@ -31,9 +30,9 @@ public class AuthenticationAPI {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try {
-            String notify = authenticationService.register(userDTO);
+            String notify = authenticationService.register(registerRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", notify));
         } catch (DuplicateException e){
             throw e;
@@ -45,16 +44,8 @@ public class AuthenticationAPI {
     }
 
 
-    @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
-        String refreshToken = request.get("refreshToken");
-        return ResponseEntity.ok(authenticationService.refreshToken(refreshToken));
-    }
-
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
-        String refreshToken = request.get("refreshToken");
-        authenticationService.logout(refreshToken);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Logout successful"));
     }
 

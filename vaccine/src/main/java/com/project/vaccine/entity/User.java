@@ -67,6 +67,7 @@ public class User implements UserDetails {
 
     private String pendingEmail; // Can be null
 
+    @Enumerated(EnumType.STRING)
     private UserStatusEnum status = UserStatusEnum.INACTIVE;
 
     @Enumerated(EnumType.STRING)

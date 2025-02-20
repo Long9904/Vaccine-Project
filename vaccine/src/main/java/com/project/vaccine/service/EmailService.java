@@ -38,7 +38,7 @@ public class EmailService {
             context.setVariable("code", code);
             String htmlContent = templateEngine.process("email-template", context);
 
-            helper.setText(htmlContent, true); // true để gửi email dạng HTML
+            helper.setText(htmlContent, true);
             mailSender.send(message);
         } catch (Exception e) {
             throw new RuntimeException("Failed to send email", e);

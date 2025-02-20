@@ -3,7 +3,6 @@ package com.project.vaccine.service;
 import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.exception.NotFoundException;
-import com.project.vaccine.repository.RefreshTokenRepository;
 import com.project.vaccine.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,8 +23,6 @@ public class TokenService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.secret}")
     private String SECRET_KEY;
@@ -46,17 +43,14 @@ public class TokenService {
                 .compact();
     }
 
-    public UserDTO getUserFromToken(String token) {
+    public User getUserFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
         String username = claims.getSubject();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(user.getUsername());
-        return userDTO;
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     public boolean isValidateToken(String token, UserDTO userDTO) {

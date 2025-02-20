@@ -48,7 +48,7 @@ public class GlobalException {
     public ResponseEntity<Map<String, Object>> handleDuplicateException(DuplicateException ex) {
         return ResponseEntity.badRequest().body(Map.of(
                 "message", "Duplicate error",
-                "errors", ex.getErrors()
+                "errors", ex.getMessage()
         ));
     }
 
@@ -66,6 +66,14 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, Object>> handleAuthenticationException(AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
+                "message", "Authentication error",
+                "errors", ex.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(AuthorizeException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthorizeException(AuthorizeException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
                 "message", "Authentication error",
                 "errors", ex.getMessage()
