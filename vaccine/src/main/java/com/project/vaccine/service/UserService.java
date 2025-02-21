@@ -1,6 +1,7 @@
 package com.project.vaccine.service;
 
 
+import com.project.vaccine.config.ModelMapperConfig;
 import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.exception.NotFoundException;
@@ -20,25 +21,15 @@ public class UserService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private ModelMapperConfig modelMapperConfig;
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public UserDTO getUserFromToken(UserDetails userDetails) {
-        String username = userDetails.getUsername();
+    public UserDTO getUser(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setName(user.getName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setRole(user.getRole());
-        userDTO.setPhone(user.getPhone());
-        userDTO.setAddress(user.getAddress());
-        userDTO.setDob(user.getDob());
-        userDTO.setGender(user.getGender());
-        userDTO.setUsername(user.getUsername());
-
-        return userDTO;
+        return modelMapperConfig.modelMapper().map(user, UserDTO.class);
     }
-
 }
