@@ -7,12 +7,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("api/vaccine")
 @SecurityRequirement(name = "api")
-@CrossOrigin("*")
 public class VaccineAPI {
 
     @Autowired
@@ -25,18 +23,8 @@ public class VaccineAPI {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> getVaccines() {
-        return ResponseEntity.ok(vaccineService.getAllVaccines());
+    public ResponseEntity<?> getVaccinesByStatus() {
+        return ResponseEntity.ok(vaccineService.getVaccinesByStatus());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getVaccineById(@PathVariable Long id) {
-        return ResponseEntity.ok(vaccineService.getVaccineById(id));
-    }
-
-    @GetMapping("/{id}/details/{detailsId}")
-    public ResponseEntity<?> getVaccineDetailsById(@PathVariable Long id, @PathVariable Long detailsId) {
-        return ResponseEntity.ok(vaccineService.getVaccineDetailsById(id, detailsId));
-    }
 }

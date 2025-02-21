@@ -53,10 +53,6 @@ public class TokenService {
         return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
     }
 
-    public boolean isValidateToken(String token, UserDTO userDTO) {
-        String username = extractUsername(token);
-        return username.equals(userDTO.getUsername());
-    }
 
     public boolean isTokenExpired(String token) {
         Claims claims = Jwts.parser()
@@ -68,13 +64,5 @@ public class TokenService {
         return expiration.before(new Date());
     }
 
-    public String extractUsername(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSecretKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.getSubject();
-    }
 }
 

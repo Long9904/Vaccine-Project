@@ -46,25 +46,25 @@ public class AuthenticationService implements UserDetailsService {
 
     public String register(RegisterRequest registerRequest) {
 
+        String message = "";
+        if (authenticationRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
+            message += "Username ";
+        }
+        if (authenticationRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            message += "Email ";
+        }
+        if(authenticationRepository.findByPhone(registerRequest.getPhone()).isPresent()){
+            message += "Phone ";
+        }
+        if (!message.isEmpty()) {
+            throw new DuplicateException(message);
+        }
+
         User user = modelMapperConfig.modelMapper().map(registerRequest, User.class);
-        try {
             user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
             user.setRole(RoleEnum.USER);
             user.setStatus(UserStatusEnum.INACTIVE);
             authenticationRepository.save(user);
-        } catch (Exception e) {
-            String message = "Duplicate: ";
-            if (e.getMessage().contains(user.getUsername())) {
-                message += "Username";
-            }
-            if (e.getMessage().contains(user.getEmail())) {
-                message += "Email";
-            }
-            if (e.getMessage().contains(user.getPhone())) {
-                message += "Phone";
-            }
-            throw new DuplicateException(message);
-        }
         return "Account created successfully";
     }
 
@@ -93,13 +93,5 @@ public class AuthenticationService implements UserDetailsService {
         }
     }
 
-
-    public boolean testLogin(String token) {
-        if (!tokenService.isTokenExpired(token)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 }

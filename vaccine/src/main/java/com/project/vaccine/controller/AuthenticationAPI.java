@@ -6,6 +6,7 @@ import com.project.vaccine.dto.request.LoginRequest;
 import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.exception.DuplicateException;
 import com.project.vaccine.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/authentication")
+@SecurityRequirement(name = "api")
 public class AuthenticationAPI {
 
     //DI: Dependency Injection
@@ -48,15 +50,5 @@ public class AuthenticationAPI {
     public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
         return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Logout successful"));
     }
-
-
-    @GetMapping
-    public ResponseEntity<?> testLogin(@RequestParam String token) {
-        if(authenticationService.testLogin(token)) {
-            return ResponseEntity.ok(Map.of("message", "Login successful"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Login failed"));
-        }
-    }
-
+    ;
 }

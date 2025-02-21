@@ -2,6 +2,7 @@ package com.project.vaccine.controller;
 
 import com.project.vaccine.dto.request.VerificationRequest;
 import com.project.vaccine.service.VerificationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/verification")
+@SecurityRequirement(name = "api")
 public class VerificationAPI {
 
     @Autowired

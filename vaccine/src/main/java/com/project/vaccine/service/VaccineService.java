@@ -53,22 +53,8 @@ public class VaccineService {
         return vaccineRepository.save(vaccine);
     }
 
-    public List<Vaccine> getAllVaccines() {
-        return vaccineRepository.findAll();
+    public List<Vaccine> getVaccinesByStatus() {
+        return vaccineRepository.findByStatus(true);
     }
 
-    public Vaccine getVaccineById(Long id) {
-        return vaccineRepository.findById(id).orElse(null);
-    }
-
-
-    public VaccineDetails getVaccineDetailsById(Long id, Long detailsId) {
-        Vaccine vaccine = vaccineRepository.findById(id).orElse(null);
-        if(vaccine == null) {
-            return null;
-        }
-        return vaccine.getVaccineDetails().
-                stream().
-                filter(vaccineDetails -> vaccineDetails.getId().equals(detailsId)).findFirst().orElse(null);
-    }
 }
