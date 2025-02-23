@@ -2,7 +2,6 @@ package com.project.vaccine.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -36,9 +35,9 @@ public class Vaccine {
     @Min(value = 0,message = "Quantity must be at least 0")
     private long quantity;
 
-    private LocalDateTime create_At;
+    private LocalDateTime createAt;
 
-    private LocalDateTime update_At;
+    private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

@@ -13,6 +13,7 @@ import java.time.Period;
 @NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 public class UserDTO {
 
     private Long id;

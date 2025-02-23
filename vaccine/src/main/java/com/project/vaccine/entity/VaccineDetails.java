@@ -28,9 +28,9 @@ public class VaccineDetails {
 
     private  boolean status = true;
 
-    private LocalDateTime create_At;
+    private LocalDateTime createAt;
 
-    private LocalDateTime update_At;
+    private LocalDateTime updateAt;
 
     @ManyToOne
     @JoinColumn(name = "vaccine_id", nullable = false, referencedColumnName = "id")

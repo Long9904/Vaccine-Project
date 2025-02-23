@@ -1,8 +1,5 @@
 package com.project.vaccine.dto.request;
 
-import com.project.vaccine.enums.RoleEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +13,7 @@ import java.time.Period;
 @Getter
 @Setter
 @AllArgsConstructor
-public class RegisterRequest {
+public class UserRequest {
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")
     private String username;
 

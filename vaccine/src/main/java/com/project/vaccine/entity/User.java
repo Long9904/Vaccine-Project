@@ -18,12 +18,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 @Entity
 @Data
 @Getter
 @Setter
+
 public class User implements UserDetails {
 
     @Id
@@ -63,7 +65,7 @@ public class User implements UserDetails {
     @Past(message = "Invalid date of birth")
     private LocalDate dob;
 
-    private LocalDateTime date_created;
+    private LocalDateTime dateCreated;
 
     private String pendingEmail; // Can be null
 
@@ -72,6 +74,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role = RoleEnum.USER;  // default role is USER
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Verification> verification = new ArrayList<>();
 
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")

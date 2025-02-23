@@ -2,7 +2,7 @@ package com.project.vaccine.service;
 
 
 import com.project.vaccine.config.ModelMapperConfig;
-import com.project.vaccine.dto.request.RegisterRequest;
+import com.project.vaccine.dto.request.UserRequest;
 import com.project.vaccine.dto.request.LoginRequest;
 import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.entity.User;
@@ -44,24 +44,24 @@ public class AuthenticationService implements UserDetailsService {
     private ModelMapperConfig modelMapperConfig;
 
 
-    public String register(RegisterRequest registerRequest) {
+    public String register(UserRequest userRequest) {
 
         String message = "";
-        if (authenticationRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
+        if (authenticationRepository.findByUsername(userRequest.getUsername()).isPresent()) {
             message += "Username ";
         }
-        if (authenticationRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+        if (authenticationRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             message += "Email ";
         }
-        if(authenticationRepository.findByPhone(registerRequest.getPhone()).isPresent()){
+        if(authenticationRepository.findByPhone(userRequest.getPhone()).isPresent()){
             message += "Phone ";
         }
         if (!message.isEmpty()) {
             throw new DuplicateException(message);
         }
 
-        User user = modelMapperConfig.modelMapper().map(registerRequest, User.class);
-            user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        User user = modelMapperConfig.modelMapper().map(userRequest, User.class);
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             user.setRole(RoleEnum.USER);
             user.setStatus(UserStatusEnum.INACTIVE);
             authenticationRepository.save(user);
@@ -82,6 +82,9 @@ public class AuthenticationService implements UserDetailsService {
 
             User user = authenticationRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+            if(user.getStatus().equals(UserStatusEnum.INACTIVE)){
+                throw new AuthenticationException("Account is not activated");
+            }
             String token = tokenService.generateAccessToken(user);
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setAccessToken(token);

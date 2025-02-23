@@ -1,7 +1,7 @@
 package com.project.vaccine.controller;
 
 
-import com.project.vaccine.dto.request.RegisterRequest;
+import com.project.vaccine.dto.request.UserRequest;
 import com.project.vaccine.dto.request.LoginRequest;
 import com.project.vaccine.dto.response.LoginResponse;
 import com.project.vaccine.exception.DuplicateException;
@@ -32,9 +32,9 @@ public class AuthenticationAPI {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserRequest userRequest) {
         try {
-            String notify = authenticationService.register(registerRequest);
+            String notify = authenticationService.register(userRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", notify));
         } catch (DuplicateException e){
             throw e;
