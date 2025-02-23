@@ -35,6 +35,7 @@ public class UserRequest {
     @Size(max = 255, message = "Address cannot exceed 255 characters")
     private String address;
 
+    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'")
     @NotBlank(message = "Gender is required")
     private String gender;
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface VaccineRepository extends JpaRepository<Vaccine, Long> {
     Optional<Vaccine> findByName(String name);
 
-    Optional<Vaccine> findByIdAndStatus(Long id, Boolean status);
+    Optional<Vaccine> findByNameIgnoreCase(String name);
 
     List<Vaccine> findByStatus(Boolean status);
 }

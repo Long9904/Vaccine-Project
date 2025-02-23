@@ -29,7 +29,7 @@ public class VaccineService {
 
     public Vaccine createVaccine(VaccineDTO vaccineDTO) {
 
-        if(vaccineRepository.findByName(vaccineDTO.getName()).isPresent()) {
+        if(vaccineRepository.findByNameIgnoreCase(vaccineDTO.getName().trim()).isPresent()) {
             throw new DuplicateException("Vaccine name already exists");
         }
 
