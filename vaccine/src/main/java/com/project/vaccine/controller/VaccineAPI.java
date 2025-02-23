@@ -27,4 +27,9 @@ public class VaccineAPI {
         return ResponseEntity.ok(vaccineService.getVaccinesByStatus());
     }
 
+    @GetMapping("/vaccine/details")
+    public ResponseEntity<?> getVaccineDetails() {
+        return ResponseEntity.ok(vaccineService.getVaccineDetails());
+    }
+
 }
