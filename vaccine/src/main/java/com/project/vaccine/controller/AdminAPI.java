@@ -45,7 +45,7 @@ public class AdminAPI {
 
     }
 
-    @PostMapping("/staff")
+    @PostMapping("/user")
     public void createStaff() {
 
     }

@@ -1,6 +1,5 @@
 package com.project.vaccine.service;
 
-
 import com.project.vaccine.entity.User;
 import com.project.vaccine.entity.Verification;
 import com.project.vaccine.enums.UserStatusEnum;
@@ -10,17 +9,15 @@ import com.project.vaccine.repository.AuthenticationRepository;
 import com.project.vaccine.repository.VerificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
+import java.util.Random;
+
 
 @Service
 public class VerificationService {
 
-    private final static int limitTimeSpawn = 5;
-    private final static String linkVerificationRegister
-            = "http://localhost:8080/api/verification/register/confirm?token=";
+    private static final int MAX_ATTEMPTS = 3;
 
     @Autowired
     private VerificationRepository verificationRepository;
@@ -31,127 +28,114 @@ public class VerificationService {
     @Autowired
     private EmailService emailService;
 
-
-/*
-*  Method getAllTokens is used to verify the token.
-*  If the token is valid, the user status = 1.
-*  Need to delete this function in production.
-* */
-    public List<Verification> getAllTokens(){
-        return verificationRepository.findAll();
-    }
-
-    public void createToken(User user, VerificationEnum verificationMethod){
+    public Verification createToken(User user, VerificationEnum verificationMethod) {
         Verification verification = new Verification();
         verification.setUser(user);
-        verification.setTokenValue(UUID.randomUUID().toString()); // random token
+        verification.setTokenValue(generateVerificationCode());
         verification.setCreatedAt(LocalDateTime.now());
-        verification.setExpiredAt(LocalDateTime.now().plusMinutes(15)); // 15 minutes
+        verification.setExpiredAt(LocalDateTime.now().plusMinutes(15));
         verification.setVerificationMethod(verificationMethod);
-        verification.setAttemptCount(0); // default 0, max 5
-        verificationRepository.save(verification);
+        verification.setAttemptCount(0);
+        return verificationRepository.save(verification);
     }
 
+    public String generateVerificationCode() {
+        Random random = new Random();
+        return String.valueOf(100000 + random.nextInt(900000));
+    }
 
-    public String verifyToken(String token) {
-        Verification verification = verificationRepository.findByTokenValue(token)
-                .orElseThrow(() -> new NotFoundException("Token is not exist"));
+    public String verifyToken(String email, String code) {
+        User user = authenticationRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        Verification verification = verificationRepository.findByUser(user)
+                .orElseThrow(() -> new NotFoundException("No verification code found for this user"));
+
+        if (user.getStatus() == UserStatusEnum.ACTIVE) {
+            return "Account is already verified!";
+        }// Account is already verified
 
         if (verification.getExpiredAt().isBefore(LocalDateTime.now())) {
-            return "Token is expired!";
+            return "Verification code has expired!";
         }
 
-        User user = verification.getUser();
-        if (user.getStatus().equals(UserStatusEnum.ACTIVE)) {
-            return "Account is already verified!";
-        }
+        if (!verification.getTokenValue().equals(code)) {
+            return "Incorrect verification code!";
+        }// Incorrect verification code
 
-        if (user.getStatus().equals(UserStatusEnum.INACTIVE)){
-            user.setStatus(UserStatusEnum.ACTIVE);
-        }
-
+        user.setStatus(UserStatusEnum.ACTIVE);
         authenticationRepository.save(user);
         verificationRepository.delete(verification);
-        return "Account is verified!";
-    }
 
+        return "Account verified successfully!";
+    }
 
 
     public String registerVerification(String email, String verificationMethod) {
-        User user = authenticationRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found"));
-
-        if (user.getStatus().equals(UserStatusEnum.ACTIVE)) {
-            return "Account is already verified!";
+        Optional<User> userOptional = authenticationRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException("User not found");
         }
 
-        Verification verification = verificationRepository.findByUser(user)
-                .orElseThrow(() -> new NotFoundException("You have not requested verification!"));
-
-        if(verification.getAttemptCount() > 0){
-            return "You have requested verification!";
+        User user = userOptional.get();
+        if (user.getStatus() == UserStatusEnum.ACTIVE) {
+            return "User has been verified";
         }
 
-        if (verification.getExpiredAt().isBefore(LocalDateTime.now())) {
-            return "Token is expired!";
-        } // If token is expired call resetVerification
+        VerificationEnum verificationMethodEnum = VerificationEnum.valueOf(verificationMethod);
+        Optional<Verification> verificationOptional = verificationRepository.findByUser(user);
 
-        // Create link
-        String link = linkVerificationRegister + verification.getTokenValue();
+        if (verificationOptional.isPresent()) {
+            return "Verification code has been sent to your email";
+        }
 
-        // Send email
+        Verification verification = createToken(user, verificationMethodEnum);
         try {
-            emailService.sendVerificationEmail(email, "Verify email", link, verificationMethod);
+            emailService.sendVerificationEmail(email, "Verification Code",
+                    verification.getTokenValue(), verificationMethod);
         } catch (Exception e) {
-            return "Send email failed!";
+            return "Failed to send email";
         }
 
-        verificationRepository.save(verification);
-        return "Email verification sent";
+        return "Verification code has been sent to your email";
     }
 
 
-    public String resetVerification(String email) {
+
+    public String resetRegisterVerification(String email, String verificationMethod) {
         User user = authenticationRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         Verification verification = verificationRepository.findByUser(user)
                 .orElseThrow(() -> new NotFoundException("You have not requested verification!"));
 
-        // If locked, return notify
         if (verification.getLockTime() != null && verification.getLockTime().isAfter(LocalDateTime.now())) {
-            return "Your account is locked for 30 minutes!";
+            return "You have exceeded the maximum number of attempts. Please try again after 30 minutes!";
         }
 
-        // Reset attempt if account not be locked
-        verification.setAttemptCount(verification.getAttemptCount() + 1);
-
-        if (verification.getAttemptCount() >= limitTimeSpawn) {
+        // Check spam
+        if (verification.getAttemptCount() >= MAX_ATTEMPTS) {
             verification.setLockTime(LocalDateTime.now().plusMinutes(30));
             verificationRepository.save(verification);
-            return "You have reached the maximum number of attempts. Your account is locked for 30 minutes!";
-        } // Spawn verify
-
-        // Create new token if it don't have lock time
-        verification.setTokenValue(UUID.randomUUID().toString());
-        verification.setExpiredAt(LocalDateTime.now().plusMinutes(15));
-
-        // Create new token
-        String link = linkVerificationRegister + verification.getTokenValue();
-
-        // Send email
-        try {
-            emailService.sendVerificationEmail(email, "Verify email", link, "REGISTER");
-        } catch (Exception e) {
-            return "Send email fail";
+            return "You have reached the maximum number of resends. Please wait 30 minutes!";
         }
 
+        // Create new token
+        String newToken = generateVerificationCode();
+        verification.setTokenValue(newToken);
+        verification.setExpiredAt(LocalDateTime.now().plusMinutes(15));
+        verification.setAttemptCount(verification.getAttemptCount() + 1);
         verificationRepository.save(verification);
-        return "Email verification sent";
+
+        try {
+            emailService.sendVerificationEmail(email, "New Verification Code", newToken, verificationMethod);
+        } catch (Exception e) {
+            verification.setAttemptCount(verification.getAttemptCount() - 1);
+            verificationRepository.save(verification);
+            return "Failed to send email";
+        }
+
+        return "A new verification code has been sent to your email!";
     }
 
-
-    public void getAllToken(){
-        verificationRepository.findAll();
-    }
 }

@@ -2,7 +2,6 @@ package com.project.vaccine.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -24,6 +23,7 @@ public class Vaccine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -35,18 +35,9 @@ public class Vaccine {
     @Min(value = 0,message = "Quantity must be at least 0")
     private long quantity;
 
-    private LocalDateTime create_At;
+    private LocalDateTime createAt;
 
-    private LocalDateTime update_At;
-
-//    @Min(value = 0,message = "Age must be at least 0 months age")
-//    @Max(value = 72,message = "Age must be at most 72 months age")
-//    private int min_age;
-//
-//    @Min(value = 0,message = "Age must be at least 0 months age")
-//    @Max(value = 72,message = "Age must be at most 72 months age")
-//    private int max_age;
-
+    private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

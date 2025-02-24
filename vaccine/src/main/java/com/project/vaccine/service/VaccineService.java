@@ -1,54 +1,72 @@
 package com.project.vaccine.service;
 
 import com.project.vaccine.dto.VaccineDTO;
+import com.project.vaccine.dto.VaccineDetailsDTO;
 import com.project.vaccine.entity.Vaccine;
+import com.project.vaccine.entity.VaccineDetails;
+import com.project.vaccine.exception.DuplicateException;
+import com.project.vaccine.repository.VaccineDetailsRepository;
 import com.project.vaccine.repository.VaccineRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class VaccineService {
+
     @Autowired
     private VaccineRepository vaccineRepository;
 
-    public List<Vaccine> getAllVaccine() {
-        return vaccineRepository.findVaccinesByStatusTrue();
-    }
+    @Autowired
+    private VaccineDetailsRepository vaccineDetailsRepository;
 
-    public Vaccine create(VaccineDTO vaccineDTO) {
+    @Autowired
+    private ModelMapper modelMapper;
+
+
+    public Vaccine createVaccine(VaccineDTO vaccineDTO) {
+
+        if(vaccineRepository.findByNameIgnoreCase(vaccineDTO.getName().trim()).isPresent()) {
+            throw new DuplicateException("Vaccine name already exists");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
         Vaccine vaccine = new Vaccine();
-        vaccine.setName(vaccineDTO.getName());
-        vaccine.setDescription(vaccineDTO.getDescription());
-        vaccine.setStatus(vaccineDTO.isStatus());
-        vaccine.setQuantity(vaccineDTO.getQuantity());
-        vaccine.setCreate_At(vaccineDTO.getCreate_At());
-        vaccine.setUpdate_At(vaccineDTO.getUpdate_At());
-//        vaccine.setMin_age(vaccineDTO.getMin_age());
-//        vaccine.setMax_age(vaccineDTO.getMax_age());
+        modelMapper.map(vaccineDTO, vaccine);
+        vaccine.setCreateAt(now);
+        vaccine.setUpdateAt(now);
+        vaccine.setStatus(true);
+
+        List<VaccineDetails> vaccineDetails = new ArrayList<>();
+
+        if(vaccineDTO.getVaccineDetails() != null) {
+            for(VaccineDetailsDTO vaccineDetailsDTO : vaccineDTO.getVaccineDetails()) {
+                // Xử lí thứ tự vaccineDetails (does_number)
+                // Xử lí quantity của vaccine, do tổng quantity của các vaccineDetails <= quantity của vaccine
+
+
+                VaccineDetails details = new VaccineDetails();
+                modelMapper.map(vaccineDetailsDTO, details);
+                details.setCreateAt(now);
+                details.setUpdateAt(now);
+                details.setStatus(true);
+                details.setVaccine(vaccine);
+                vaccineDetails.add(details);
+            }
+        }
+
+        vaccine.setVaccineDetails(vaccineDetails);
         return vaccineRepository.save(vaccine);
     }
 
-    public Vaccine delete(Long id) {
-        Vaccine vaccine = vaccineRepository.findVaccineById(id);
-        vaccine.setStatus(false);
-        return vaccineRepository.save(vaccine);
+    public List<Vaccine> getVaccinesByStatus() {
+        return vaccineRepository.findByStatus(true);
     }
 
-    public Vaccine update(Long id, VaccineDTO vaccine) {
-        Vaccine newVaccine = vaccineRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vaccine not found with id " + id));
-
-        newVaccine.setName(vaccine.getName());
-        newVaccine.setDescription(vaccine.getDescription());
-        newVaccine.setStatus(vaccine.isStatus());
-        newVaccine.setQuantity(vaccine.getQuantity());
-        newVaccine.setCreate_At(vaccine.getCreate_At());
-        newVaccine.setUpdate_At(vaccine.getUpdate_At());
-//        newVaccine.setMin_age(vaccine.getMin_age());
-//        newVaccine.setMax_age(vaccine.getMax_age());
-
-        return vaccineRepository.save(newVaccine);
+    public List<VaccineDetails> getVaccineDetails() {
+        return vaccineDetailsRepository.findAll();
     }
 }

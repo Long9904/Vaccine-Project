@@ -1,18 +1,17 @@
 package com.project.vaccine.controller;
 
-
-
-import com.project.vaccine.entity.Verification;
+import com.project.vaccine.dto.request.VerificationRequest;
 import com.project.vaccine.service.VerificationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("api/verification")
+@SecurityRequirement(name = "api")
 public class VerificationAPI {
 
     @Autowired
@@ -20,10 +19,10 @@ public class VerificationAPI {
 
 
     // Admin, Staff, User
-    @GetMapping("/register/confirm")
-    public ResponseEntity<String> sendVerificationEmail(@RequestParam String token) {
+    @PostMapping("/register/confirm")
+    public ResponseEntity<String> sendVerificationEmail(@RequestBody VerificationRequest verificationRequest) {
         try {
-            String message = verificationService.verifyToken(token);
+            String message = verificationService.verifyToken(verificationRequest.getEmail(), verificationRequest.getCode());
             return ResponseEntity.ok(message);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -46,16 +45,11 @@ public class VerificationAPI {
     @GetMapping("/register/re-verify")
     public ResponseEntity<String> resetVerification(@RequestParam String email) {
         try {
-            String message = verificationService.resetVerification(email);
+            String message = verificationService.resetRegisterVerification(email, "REGISTER");
             return ResponseEntity.ok(message);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAll() {
-        List<Verification> v = verificationService.getAllTokens();
-        return ResponseEntity.ok(v);
-    }
 }

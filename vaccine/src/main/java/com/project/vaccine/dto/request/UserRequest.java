@@ -1,11 +1,10 @@
-package com.project.vaccine.dto;
+package com.project.vaccine.dto.request;
 
-
-import com.project.vaccine.enums.RoleEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -14,10 +13,7 @@ import java.time.Period;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserDTO {
-
-    private Long id;
-
+public class UserRequest {
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")
     private String username;
 
@@ -46,9 +42,6 @@ public class UserDTO {
     @NotNull(message = "Date of birth is required")
     @Past(message = "Invalid date of birth")
     private LocalDate dob;
-
-    @Enumerated(EnumType.STRING)
-    private RoleEnum role = RoleEnum.USER;
 
     // Custom validation
     @AssertTrue(message = "You must be at least 18 years old to register")

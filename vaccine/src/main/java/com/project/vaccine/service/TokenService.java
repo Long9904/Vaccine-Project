@@ -1,9 +1,7 @@
 package com.project.vaccine.service;
 
-import com.project.vaccine.dto.UserDTO;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.exception.NotFoundException;
-import com.project.vaccine.repository.RefreshTokenRepository;
 import com.project.vaccine.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -24,8 +22,6 @@ public class TokenService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.secret}")
     private String SECRET_KEY;
@@ -38,7 +34,7 @@ public class TokenService {
 
     public String generateAccessToken(User user) {
         return Jwts.builder()
-                .subject(user.getUsername())
+                .subject(user.getId().toString())
                 .claim("role", user.getRole())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -46,41 +42,15 @@ public class TokenService {
                 .compact();
     }
 
-    public UserDTO getUserFromToken(String token) {
+    public User getUserFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        String username = claims.getSubject();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername(user.getUsername());
-        return userDTO;
-    }
-
-    public boolean isValidateToken(String token, UserDTO userDTO) {
-        String username = extractUsername(token);
-        return username.equals(userDTO.getUsername());
-    }
-
-    public boolean isTokenExpired(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSecretKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        Date expiration = claims.getExpiration();
-        return expiration.before(new Date());
-    }
-
-    public String extractUsername(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getSecretKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.getSubject();
+        String userId = claims.getSubject();
+        Long id = Long.parseLong(userId);
+        return userRepository.findUserById(id).orElseThrow(() -> new NotFoundException("User not found"));
     }
 }
 

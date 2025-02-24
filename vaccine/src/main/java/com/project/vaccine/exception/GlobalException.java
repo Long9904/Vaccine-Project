@@ -6,9 +6,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,32 +42,25 @@ public class GlobalException {
     }
 
     // Xử lí lỗi duplicate
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<Map<String, Object>> handleDuplicateException(DuplicateException ex) {
-        return ResponseEntity.badRequest().body(Map.of(
-                "message", "Duplicate error",
-                "errors", ex.getErrors()
-        ));
+    public ResponseEntity<?> handleDuplicateException(DuplicateException ex) {
+        return new ResponseEntity<>("Duplicate: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     // Xử lí lỗi not found
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
-                "message", "Not found error",
-                "errors", ex.getMessage()
-        ));
+    public ResponseEntity<?> handleNotFoundException(NotFoundException ex) {
+        return new ResponseEntity<>("Not found: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     // Xử lí lỗi authentication
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<Map<String, Object>> handleAuthenticationException(AuthenticationException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
-                "message", "Authentication error",
-                "errors", ex.getMessage()
-        ));
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex) {
+        return new ResponseEntity<>("Authentication error: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthorizeException.class)
+    public ResponseEntity<?> handleAuthorizeException(AuthorizeException ex) {
+        return new ResponseEntity<>("Authorize error: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }

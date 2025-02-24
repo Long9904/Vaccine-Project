@@ -18,12 +18,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 @Entity
 @Data
 @Getter
 @Setter
+
 public class User implements UserDetails {
 
     @Id
@@ -34,7 +36,7 @@ public class User implements UserDetails {
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")
     private String username;
 
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$",
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W_]).{8,}$",
             message = "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 8 characters")
     private String password;
 
@@ -55,6 +57,7 @@ public class User implements UserDetails {
     @Size(max = 255, message = "Address cannot exceed 255 characters")
     private String address;
 
+    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'")
     @NotBlank(message = "Gender is required")
     private String gender;
 
@@ -63,14 +66,18 @@ public class User implements UserDetails {
     @Past(message = "Invalid date of birth")
     private LocalDate dob;
 
-    private LocalDateTime date_created;
+    private LocalDateTime dateCreated;
 
     private String pendingEmail; // Can be null
 
+    @Enumerated(EnumType.STRING)
     private UserStatusEnum status = UserStatusEnum.INACTIVE;
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role = RoleEnum.USER;  // default role is USER
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Verification> verification = new ArrayList<>();
 
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
