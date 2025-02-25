@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("api/vaccine")
+@RestController
+@RequestMapping("/api/vaccine")
 @SecurityRequirement(name = "api")
 public class VaccineAPI {
 
@@ -27,7 +28,7 @@ public class VaccineAPI {
         return ResponseEntity.ok(vaccineService.getVaccinesByStatus());
     }
 
-    @GetMapping("/vaccine/details")
+    @GetMapping("/details")
     public ResponseEntity<?> getVaccineDetails() {
         return ResponseEntity.ok(vaccineService.getVaccineDetails());
     }
