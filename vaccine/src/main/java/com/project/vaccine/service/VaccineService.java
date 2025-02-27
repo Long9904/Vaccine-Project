@@ -44,8 +44,9 @@ public class VaccineService {
 
         if(vaccineDTO.getVaccineDetails() != null) {
             for(VaccineDetailsDTO vaccineDetailsDTO : vaccineDTO.getVaccineDetails()) {
+
                 // Xử lí thứ tự vaccineDetails (does_number)
-                // Xử lí quantity của vaccine, do tổng quantity của các vaccineDetails <= quantity của vaccine
+
 
 
                 VaccineDetails details = new VaccineDetails();
