@@ -2,6 +2,7 @@ package com.project.vaccine.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,6 @@ public class VaccineDTO {
     @Min(value = 0, message = "Quantity must be at least 0")
     private long quantity;
 
+    @Size(min = 1, message = "At least one vaccine detail is required")
     private List<VaccineDetailsDTO> vaccineDetails;
 }

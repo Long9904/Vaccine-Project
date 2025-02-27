@@ -35,9 +35,17 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public UserDTO getUser(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
-        return modelMapperConfig.modelMapper().map(user, UserDTO.class);
+    public UserDTO getUserProfile(String username, String email) {
+
+       if(username != null && email == null){ // If user logs in with username and password
+           User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
+           return modelMapperConfig.modelMapper().map(user, UserDTO.class);
+       } else if(email != null && username == null){ // If user logs in with OAuth2
+           User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
+           return modelMapperConfig.modelMapper().map(user, UserDTO.class);
+       } else { // If user is not logged in
+           throw new NotFoundException("User not found");
+       }
     }
 
     public UserDTO updateCurrentUser(String username, UserRequest userRequest) {

@@ -48,10 +48,17 @@ public class SecurityConfig {
         return http
                 .cors().and()
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers("/**", "/oauth2/**").permitAll() // Allow all requests
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> {
+                            try {
+                                auth
+                                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                                        .requestMatchers("/**", "/oauth2/**").permitAll() // Allow all requests
+                                        .anyRequest().authenticated()
+                                        .and().oauth2Login();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                 )
                 .userDetailsService(authenticationService)
                 .sessionManagement(session
