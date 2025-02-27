@@ -62,12 +62,7 @@ public class Filter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        String host = request.getHeader("Host");
         String uri = request.getRequestURI();
-        if (host != null && host.contains("ngrok")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         if (isPermitted(uri)) {
             filterChain.doFilter(request, response);
             return;
