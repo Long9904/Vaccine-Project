@@ -71,7 +71,6 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("Username: " + username);
         return authenticationRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Username not found"));
     }
 
@@ -92,8 +91,11 @@ public class AuthenticationService implements UserDetailsService {
             loginResponse.setRole(user.getRole());
             return loginResponse;
 
+        }
+        catch (AuthenticationException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AuthenticationException("Username or password is incorrect");
+            throw new AuthenticationException("Invalid username or password");
         }
     }
 
