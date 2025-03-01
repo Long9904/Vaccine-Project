@@ -15,6 +15,8 @@ import java.time.Period;
 @AllArgsConstructor
 public class UserRequest {
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")
+    @Pattern(regexp = "^[^\\s]*$", message = "Username must not contain spaces")//New change
+    @Pattern(regexp = "^[0-9A-Za-z]*$", message = "Username must not contain special characters") //New change
     private String username;
 
     @NotBlank(message = "Password is required")
@@ -23,6 +25,7 @@ public class UserRequest {
     private String password;
 
     @NotBlank(message = "Name is required")
+
     private String name;
 
     @Pattern(regexp = "^[\\w.-]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Invalid email")
