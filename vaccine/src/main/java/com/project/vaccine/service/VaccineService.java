@@ -61,14 +61,7 @@ public class VaccineService {
 
                 totalQuantity += 1;
             }
-            System.out.println("totalQuantity: " + totalQuantity);
-//             Xử lí quantity của vaccine, do tổng quantity của các vaccineDetails <= quantity của vaccine
-            if (totalQuantity > vaccineDTO.getQuantity()) {
-                throw new InvalidDataException("Total of dose number of vaccine details is greater than quantity of vaccine");
-            }else
-            {
-                vaccineDetailsInput = vaccineDetails;
-            }
+           
         }
 
         vaccine.setVaccineDetails(vaccineDetailsInput);
