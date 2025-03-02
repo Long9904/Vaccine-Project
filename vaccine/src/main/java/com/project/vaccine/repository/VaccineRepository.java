@@ -12,4 +12,7 @@ public interface VaccineRepository extends JpaRepository<Vaccine, Long> {
     Optional<Vaccine> findByNameIgnoreCase(String name);
 
     List<Vaccine> findByStatus(Boolean status);
+
+
+
 }

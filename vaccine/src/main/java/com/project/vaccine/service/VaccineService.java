@@ -43,11 +43,17 @@ public class VaccineService {
         List<VaccineDetails> vaccineDetails = new ArrayList<>();
 
         if(vaccineDTO.getVaccineDetails() != null) {
+            List<Integer> doseNumbers = new ArrayList<>();
             for(VaccineDetailsDTO vaccineDetailsDTO : vaccineDTO.getVaccineDetails()) {
-
-                // Xử lí thứ tự vaccineDetails (does_number)
-
-
+                // Xử lí logic thứ tự vaccineDetails (does_number)
+                // Ví dụ: vaccineDetails 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+                //Phải thêm vaccineDetails 1 trước, sau đó mới thêm vaccineDetails 2, 3, 4, 5, 6, 7, 8, 9, 10
+                int doseNumber = vaccineDetailsDTO.getDose_number();
+                // Kiểm tra trùng lặp dose_number trong cùng một lần thêm
+                if (doseNumbers.contains(doseNumber)) {
+                    throw new DuplicateException("Dose number " + doseNumber + " already exists");
+                }
+                doseNumbers.add(doseNumber);
 
                 VaccineDetails details = new VaccineDetails();
                 modelMapper.map(vaccineDetailsDTO, details);
