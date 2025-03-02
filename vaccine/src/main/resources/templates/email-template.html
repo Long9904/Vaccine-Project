@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verification</title>
+</head>
+<body>
+<p>Hello,</p>
+<p>You are receiving this email because you requested a <span th:text="${method}"></span>. Below is your verification code:</p>
+<p style="color: red; font-weight: bold; font-size: 20px;" th:text="${code}"></p>
+<p>If you did not request this, please ignore this email.</p>
+<p>Thank you!</p>
+</body>
+</html>
