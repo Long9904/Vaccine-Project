@@ -58,8 +58,6 @@ public class VaccineService {
                 details.setStatus(true);
                 details.setVaccine(vaccine);
                 vaccineDetails.add(details);
-
-                totalQuantity += 1;
             }
            
         }
