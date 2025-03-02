@@ -37,15 +37,25 @@ public class UserService {
 
     public UserDTO getUserProfile(String username, String email) {
 
-       if(username != null && email == null){ // If user logs in with username and password
-           User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
-           return modelMapperConfig.modelMapper().map(user, UserDTO.class);
-       } else if(email != null && username == null){ // If user logs in with OAuth2
-           User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
-           return modelMapperConfig.modelMapper().map(user, UserDTO.class);
-       } else { // If user is not logged in
-           throw new NotFoundException("User not found");
-       }
+        if (username != null && email == null) { // If user logs in with username and password
+            User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
+            UserDTO userDTO = modelMapperConfig.modelMapper().map(user, UserDTO.class);
+            userDTO.setPassword(null);
+            userDTO.setId(null);
+            userDTO.setRole(null);
+            return userDTO;
+
+        } else if (email != null && username == null) { // If user logs in with OAuth2
+            User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
+            UserDTO userDTO = modelMapperConfig.modelMapper().map(user, UserDTO.class);
+            userDTO.setPassword(null);
+            userDTO.setId(null);
+            userDTO.setRole(null);
+            return userDTO;
+
+        } else { // If user is not logged in
+            throw new NotFoundException("User not found");
+        }
     }
 
     public UserDTO updateCurrentUser(String username, UserRequest userRequest) {
@@ -53,13 +63,13 @@ public class UserService {
 
         String message = "";
 
-        if(userRepository.findByUsername(userRequest.getUsername()).isPresent()){
+        if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
             message += "Username ";
         }
-        if(userRepository.findByEmail(userRequest.getEmail()).isPresent()){
+        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
             message += "Email ";
         }
-        if(userRepository.findByPhone(userRequest.getPhone()).isPresent()){
+        if (userRepository.findByPhone(userRequest.getPhone()).isPresent()) {
             message += "Phone ";
         }
         if (!message.isEmpty()) {
