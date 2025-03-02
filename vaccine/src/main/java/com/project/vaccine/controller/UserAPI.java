@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,9 +24,18 @@ public class UserAPI {
     private UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> userProfile(@AuthenticationPrincipal UserDetails userDetails) {
-        UserDTO userDTO = userService.getUser(userDetails.getUsername());
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    public ResponseEntity<UserDTO> userProfile(@AuthenticationPrincipal Object userDetails) {
+        String username = null;
+        String email = null;
+        if (userDetails instanceof UserDetails) {
+            username = ((UserDetails) userDetails).getUsername();
+        } else if (userDetails instanceof OAuth2User) {
+            email = ((OAuth2User) userDetails).getAttribute("email");
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        UserDTO user = userService.getUserProfile(username, email);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/me")

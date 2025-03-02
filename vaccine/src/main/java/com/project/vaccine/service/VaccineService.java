@@ -42,14 +42,9 @@ public class VaccineService {
         vaccine.setUpdateAt(now);
         vaccine.setStatus(true);
 
-        List<VaccineDetails> vaccineDetailsInput = new ArrayList<>();
         List<VaccineDetails> vaccineDetails = new ArrayList<>();
 
         if(vaccineDTO.getVaccineDetails() != null) {
-            // Xử lí thứ tự vaccineDetails (does_number) - chưa hiểu cái này
-            vaccineDTO.getVaccineDetails().sort(Comparator.comparingInt(VaccineDetailsDTO::getDose_number));
-            long totalQuantity = 0;
-
             for(VaccineDetailsDTO vaccineDetailsDTO : vaccineDTO.getVaccineDetails()) {
                 VaccineDetails details = new VaccineDetails();
                 modelMapper.map(vaccineDetailsDTO, details);
@@ -61,8 +56,7 @@ public class VaccineService {
             }
            
         }
-
-        vaccine.setVaccineDetails(vaccineDetailsInput);
+        vaccine.setVaccineDetails(vaccineDetails);
         return vaccineRepository.save(vaccine);
     }
 
