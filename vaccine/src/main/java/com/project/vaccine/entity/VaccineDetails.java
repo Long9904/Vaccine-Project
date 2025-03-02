@@ -40,9 +40,6 @@ public class VaccineDetails {
     @Min(value = 0,message = "Price must be at least 0")
     private double price;
 
-    @NotBlank(message = "Side effect is required")
-    private String side_effect;
-
     private boolean recommended;
 
 }

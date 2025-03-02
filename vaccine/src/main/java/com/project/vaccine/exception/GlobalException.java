@@ -63,4 +63,10 @@ public class GlobalException {
     public ResponseEntity<?> handleAuthorizeException(AuthorizeException ex) {
         return new ResponseEntity<>("Authorize error: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+
+    // Xử lí lỗi dữ liệu dose_number vượt quá quantity của Vaccine
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<?> handleInvalidDataException(InvalidDataException ex) {
+        return new ResponseEntity<>("Invalid data: "+ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

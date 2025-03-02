@@ -91,8 +91,11 @@ public class AuthenticationService implements UserDetailsService {
             loginResponse.setRole(user.getRole());
             return loginResponse;
 
+        }
+        catch (AuthenticationException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AuthenticationException("Username or password is incorrect");
+            throw new AuthenticationException("Invalid username or password");
         }
     }
 
