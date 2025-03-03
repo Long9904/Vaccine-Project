@@ -12,6 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ChildDTO {
 
+    private Long id;
+
     @NotBlank(message = "Name is required")
     private String name;
 
