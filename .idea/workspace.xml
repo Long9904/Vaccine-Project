@@ -5,19 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4a6d15-88a7-4cdb-8cb0-0f10cea4add0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/ChildAPI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/utils/UserUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/New folder.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Vaccine-Project.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Project.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/UserAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/UserAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/ChildAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/ChildAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/Child.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/Child.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
