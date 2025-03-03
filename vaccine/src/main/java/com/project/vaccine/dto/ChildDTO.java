@@ -1,19 +1,16 @@
-package com.project.vaccine.entity;
+package com.project.vaccine.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-@Entity
 @Data
-public class Child {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@AllArgsConstructor
+@NoArgsConstructor
+public class ChildDTO {
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -34,15 +31,4 @@ public class Child {
 
     @Size(max = 255, message = "Note cannot exceed 255 characters")
     private String note;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    private boolean status;
-
-    // Add user relationship
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
 }

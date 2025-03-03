@@ -80,6 +80,10 @@ public class User implements UserDetails {
     private List<Verification> verification = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Child> children = new ArrayList<>();
+
+
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@class")
     @JsonSubTypes({
             @Type(value = SimpleGrantedAuthority.class, name = "SimpleGrantedAuthority")
