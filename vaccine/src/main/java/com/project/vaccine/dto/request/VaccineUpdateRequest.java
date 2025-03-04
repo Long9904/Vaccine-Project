@@ -1,23 +1,15 @@
-package com.project.vaccine.dto;
+package com.project.vaccine.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.List;
-
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VaccineDTO {
-
-    private long id;
-
+public class VaccineUpdateRequest {
     @NotBlank(message = "Name is required")
     private String name;
 
@@ -26,7 +18,4 @@ public class VaccineDTO {
 
     @Min(value = 0, message = "Quantity must be at least 0")
     private long quantity;
-
-    @Size(min = 1, message = "At least one vaccine detail is required")
-    private List<VaccineDetailsDTO> vaccineDetails;
 }

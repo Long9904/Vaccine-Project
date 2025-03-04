@@ -11,13 +11,4 @@ public class AdminService {
 
     @Autowired
     private UserRepository userRepository;
-
-    public boolean updateUser(long id, UserDTO userDTO){
-
-        User user = userRepository.findUserById(id).orElse(null);
-        if(user != null){
-            return true;
-        }
-        return false;
-    }
 }
