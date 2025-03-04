@@ -17,26 +17,26 @@ public class ChildAPI {
     private ChildService childService;
 
     @PostMapping
-    public ResponseEntity<?> createChild(@Valid @RequestBody ChildDTO childDTO) {
-        ChildDTO newChildDTO = childService.createChild(childDTO);
+    public ResponseEntity<?> createChildByCurrentUser(@Valid @RequestBody ChildDTO childDTO) {
+        ChildDTO newChildDTO = childService.createChildByCurrentUser(childDTO);
         return ResponseEntity.ok(newChildDTO);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllChildren() {
+    public ResponseEntity<?> getAllChildrenByCurrentUser() {
         // show all children for the current user
-        return ResponseEntity.ok(childService.getChildren());
+        return ResponseEntity.ok(childService.getChildrenByCurrentUser());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateChild(@PathVariable Long id, @Valid @RequestBody ChildDTO childDTO) {
-        ChildDTO updatedChildDTO = childService.updateChild(id ,childDTO);
+    public ResponseEntity<?> updateChildByCurrentUser(@PathVariable Long id, @Valid @RequestBody ChildDTO childDTO) {
+        ChildDTO updatedChildDTO = childService.updateChildByCurrentUser(id ,childDTO);
         return ResponseEntity.ok(updatedChildDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteChild(@PathVariable Long id) {
-        childService.deleteChild(id);
+    public ResponseEntity<?> deleteChildByCurrentUser(@PathVariable Long id) {
+        childService.deleteChildByCurrentUser(id);
         return ResponseEntity.ok("Child deleted successfully");
     }
 }

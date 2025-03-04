@@ -23,14 +23,14 @@ public class Vaccine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    //@Column(unique = true)
     @NotBlank(message = "Name is required")
     private String name;
 
     @NotBlank(message = "Description is required")
     private String description;
 
-    private boolean status = true;
+    private boolean status;
 
     @Min(value = 0,message = "Quantity must be at least 0")
     private long quantity;

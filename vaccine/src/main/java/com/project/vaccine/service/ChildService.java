@@ -1,15 +1,14 @@
 package com.project.vaccine.service;
 
-import com.project.vaccine.config.ModelMapperConfig;
 import com.project.vaccine.dto.ChildDTO;
 import com.project.vaccine.entity.Child;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.exception.NotFoundException;
 import com.project.vaccine.repository.ChildRepository;
 import com.project.vaccine.utils.UserUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,26 +23,27 @@ public class ChildService {
     private UserUtils userUtils;
 
     @Autowired
-    ModelMapperConfig modelMapperConfig;
+    private final ModelMapper modelMapper;
 
-    public ChildService(ModelMapperConfig modelMapperConfig) {
+    public ChildService(ModelMapper modelMapper) {
         // Skip ID mapping
-        modelMapperConfig.modelMapper().typeMap(ChildDTO.class, Child.class)
+        this.modelMapper = modelMapper;
+        this.modelMapper.typeMap(ChildDTO.class, Child.class)
                 .addMappings(mapper -> mapper.skip(Child::setId));
     }
 
-    public ChildDTO createChild( ChildDTO childDTO) {
+    public ChildDTO createChildByCurrentUser(ChildDTO childDTO) {
         LocalDateTime now = LocalDateTime.now();
-        Child child = modelMapperConfig.modelMapper().map(childDTO, Child.class);
+        Child child = modelMapper.map(childDTO, Child.class);
         child.setStatus(true);
         child.setCreatedAt(now);
         child.setUpdatedAt(now);
         child.setUser(userUtils.getCurrentUser());
-        return modelMapperConfig.modelMapper().map(childRepository.save(child), ChildDTO.class);
+        return modelMapper.map(childRepository.save(child), ChildDTO.class);
     }
 
 
-    public ChildDTO updateChild(Long id, ChildDTO childDTO) {
+    public ChildDTO updateChildByCurrentUser(Long id, ChildDTO childDTO) {
         LocalDateTime now = LocalDateTime.now();
         User user = userUtils.getCurrentUser();
 
@@ -52,27 +52,27 @@ public class ChildService {
                 -> new NotFoundException("Child not found or you don't have permission to update this child"));
 
         // Map child DTO to child entity
-        modelMapperConfig.modelMapper().map(childDTO, child);
+        modelMapper.map(childDTO, child);
         child.setUpdatedAt(now);
 
         // Save updated child
         Child updatedChild = childRepository.save(child);
 
         // Convert updated child entity back to DTO
-        return modelMapperConfig.modelMapper().map(updatedChild, ChildDTO.class);
+        return modelMapper.map(updatedChild, ChildDTO.class);
     }
 
-    public List<ChildDTO> getChildren() {
+    public List<ChildDTO> getChildrenByCurrentUser() {
         User user = userUtils.getCurrentUser();
         List<Child> children = childRepository.findByUserIdAndStatus(user.getId(), true);
-        return children.stream().map(child -> modelMapperConfig.modelMapper().
+        return children.stream().map(child -> modelMapper.
                 map(child, ChildDTO.class)).collect(Collectors.toList());
     }
 
-    public void deleteChild(Long id) {
+    public void deleteChildByCurrentUser(Long id) {
         User user = userUtils.getCurrentUser();
         Child child = childRepository.findByIdAndUserId(id, user.getId()).orElseThrow(()
-                -> new NotFoundException("Child not found or you don't have permission to delete this child"));
+                -> new NotFoundException("Child not found"));
         // set status to false
         child.setStatus(false);
         childRepository.save(child);

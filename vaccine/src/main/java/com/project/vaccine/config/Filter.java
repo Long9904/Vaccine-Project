@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -33,25 +34,35 @@ public class Filter extends OncePerRequestFilter {
     @Autowired
     private AuthenticationService authenticationService;
 
-
     @Qualifier("handlerExceptionResolver")
     @Autowired
     private HandlerExceptionResolver resolver;
 
-    List<String> PUBLIC_API = List.of(
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/swagger-resources/**",
-            "/api/authentication/login",
-            "/api/authentication/register",
-            "/api/verification/register/confirm",
-            "/api/verification/register/verify",
-            "/api/verification/register/re-verify"
+    private static final AntPathMatcher pathMatcher = new AntPathMatcher();
+
+
+    // List of public APIs
+        private record PublicAPI(String uri, HttpMethod method) {
+    }
+
+    List<PublicAPI> PUBLIC_API = List.of(
+            new PublicAPI("/swagger-ui/**", null),
+            new PublicAPI("/v3/api-docs/**", null),
+            new PublicAPI("/swagger-resources/**", null),
+            new PublicAPI("/api/authentication/login", null),
+            new PublicAPI("/api/authentication/register", null),
+            new PublicAPI("/api/verification/register/confirm", null),
+            new PublicAPI("/api/verification/register/verify", null),
+            new PublicAPI("/api/verification/register/re-verify", null),
+            new PublicAPI("/api/verification/forgot-password/confirm", null),
+            new PublicAPI("/api/public/**", null)
     );
 
-    boolean isPermitted(String uri) {
-        AntPathMatcher patchMatch = new AntPathMatcher();
-        return PUBLIC_API.stream().anyMatch(item -> patchMatch.match(item, uri));
+    boolean isPermitted(String uri, String method) {
+        return PUBLIC_API.stream().anyMatch(api ->
+                pathMatcher.match(api.uri, uri) &&
+                        (api.method == null || api.method.name().equalsIgnoreCase(method))
+        );
     }
 
 
@@ -63,10 +74,11 @@ public class Filter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String uri = request.getRequestURI();
-        if (isPermitted(uri)) {
+        String method = request.getMethod();
+        if (isPermitted(uri, method)) {
             filterChain.doFilter(request, response);
             return;
-        }
+        } // Public APIs are allowed to access without token
 
         String token = getToken(request);
         if (token == null) {

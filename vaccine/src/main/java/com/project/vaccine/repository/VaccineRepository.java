@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VaccineRepository extends JpaRepository<Vaccine, Long> {
-    Optional<Vaccine> findByName(String name);
+    boolean existsByNameAndIdNot(String name, Long id);
 
     Optional<Vaccine> findByNameIgnoreCase(String name);
 
+    Optional<Vaccine> findByNameIgnoreCaseAndStatus(String name, Boolean status);
     List<Vaccine> findByStatus(Boolean status);
 }
