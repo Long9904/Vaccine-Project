@@ -24,7 +24,7 @@ public class VaccineDTO {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @Min(value = 0, message = "Quantity must be at least 0")
+    @Min(value = 1, message = "Quantity must be at least 1")
     private long quantity;
 
     @Size(min = 1, message = "At least one vaccine detail is required")

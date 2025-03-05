@@ -1,7 +1,6 @@
 package com.project.vaccine.dto;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +15,10 @@ public class VaccineDetailsDTO {
     private long id;
 
     @Min(value = 1, message = "Dose number must be at least 1")
-    private int dose_number;
+    private int doseNumber;
 
     @Min(value = 0, message = "Interval days must be at least 0")
-    private int interval_days;
+    private int intervalDays;
 
     @Min(value = 0, message = "Price must be at least 0")
     private double price;

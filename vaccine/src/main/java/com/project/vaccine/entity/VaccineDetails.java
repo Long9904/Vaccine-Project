@@ -3,7 +3,6 @@ package com.project.vaccine.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +20,10 @@ public class VaccineDetails {
     private Long id;
 
     @Min(value = 1,message = "Dose number must be at least 1")
-    private int dose_number;
+    private int doseNumber;
 
-    @Min(value = 0,message = "Date after must be at least 0")
-    private int interval_days;
+    @Min(value = 0,message = "Day must be at least 0")
+    private int intervalDays;
 
     private  boolean status = true;
 
