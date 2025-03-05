@@ -142,7 +142,7 @@ public class VaccineService {
 
         if (vaccineDetailsList.size() > 1) {
             for (VaccineDetails details : vaccineDetailsList) {
-                if (details.getDoseNumber() == vaccineDetailsDTO.getDoseNumber()) {
+                if (details.getDoseNumber() == vaccineDetailsDTO.getDoseNumber() && !details.getId().equals(detailsId)) {
                     throw new InvalidDataException("Dose number must be unique");
                 }// Check dose_number of vaccine details
             }

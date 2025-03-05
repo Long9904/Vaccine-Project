@@ -53,7 +53,8 @@ public class VaccineAPI {
                                                   @PathVariable Long detailsId,
                                                   @Valid @RequestBody VaccineDetailsDTO vaccineDetailsDTO) {
 
-        VaccineDetailsDTO newVaccineDetailsDTO = vaccineService.updateVaccineDetailsByVaccineId(vaccineId, detailsId, vaccineDetailsDTO);
+        VaccineDetailsDTO newVaccineDetailsDTO =
+                vaccineService.updateVaccineDetailsByVaccineId(vaccineId, detailsId, vaccineDetailsDTO);
         return ResponseEntity.ok(newVaccineDetailsDTO);
 
     }
