@@ -78,11 +78,6 @@ public class ChildService {
         childRepository.save(child);
     }
 
-    // Add method to get child by ID, Admin can view all children
-    public ChildDTO getChildById(Long id) {
-        return null;
-    }
-
     // Add method to get all children, Admin can view all children
     public List<ChildDTO> getAllChildren() {
         return null;
