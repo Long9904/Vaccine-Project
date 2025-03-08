@@ -6,16 +6,16 @@ import com.project.vaccine.dto.response.VaccineResponse;
 import com.project.vaccine.service.VaccineService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/vaccine")
 @SecurityRequirement(name = "api")
+@PreAuthorize("hasRole('ADMIN')")
 public class VaccineAPI {
 
     @Autowired
@@ -59,10 +59,8 @@ public class VaccineAPI {
 
     }
 
-
-
-
-
-
-
+    @GetMapping("/vaccines")
+    public ResponseEntity<?> getAllVaccines() {
+        return ResponseEntity.ok(vaccineService.getAllVaccines());
+    }
 }

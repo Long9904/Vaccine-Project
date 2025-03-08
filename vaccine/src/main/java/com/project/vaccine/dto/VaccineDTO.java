@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VaccineDTO {
 
-    private long id;
+    private Long id;
 
     @NotBlank(message = "Name is required")
     private String name;

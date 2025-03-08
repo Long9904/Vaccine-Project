@@ -47,7 +47,6 @@ public class VaccineService {
         LocalDateTime now = LocalDateTime.now();
         /*
          - Nếu vaccine tồn tại và status = false thì cho phép tạo mới bằng cách update lại thông tin cũ
-           + Cập nhật status = true
          - Nếu vaccine tồn tại và status = true thì không cho phép tạo mới
         * */
 
@@ -74,13 +73,10 @@ public class VaccineService {
         List<VaccineDetails> vaccineDetails = new ArrayList<>();
         Set<Integer> doseNumbers = new HashSet<>();
         for (VaccineDetailsDTO vaccineDetailsDTO : vaccineDTO.getVaccineDetails()) {
-
             if (doseNumbers.contains(vaccineDetailsDTO.getDoseNumber())) {
                 throw new InvalidDataException("Dose number must be unique");
-            }
-
+            }// Check dose_number of vaccine details
             doseNumbers.add(vaccineDetailsDTO.getDoseNumber());
-
             VaccineDetails details = new VaccineDetails();
             modelMapper.map(vaccineDetailsDTO, details);
             details.setCreateAt(now);
@@ -139,17 +135,16 @@ public class VaccineService {
                 .orElseThrow(() -> new NotFoundException("Vaccine details not found"));
 
         List<VaccineDetails> vaccineDetailsList = vaccineDetailsRepository.findByVaccineId(vaccineId);
-
-        if (vaccineDetailsList.size() > 1) {
-            for (VaccineDetails details : vaccineDetailsList) {
+        // Size don't need to check because it's handled in createVaccine method
+        for (VaccineDetails details : vaccineDetailsList) {
                 if (details.getDoseNumber() == vaccineDetailsDTO.getDoseNumber() && !details.getId().equals(detailsId)) {
                     throw new InvalidDataException("Dose number must be unique");
                 }// Check dose_number of vaccine details
-            }
         }
 
-        // Check foes_number of vaccine details
-        // Không cho phép cập nhật số lượng vị trí tiêm chủng nếu đã có người đăng ký (nếu đc)
+
+        // Check does_number of vaccine details
+        // Không cho phép cập nhật số lượng vị trí tiêm chủng nếu đã có người đăng ký (nếu đc, hơi khó triển khai)
         // Không cho update giống thứ tư tự tiêm chủng của vaccine đó
 
         modelMapper.map(vaccineDetailsDTO, vaccineDetails);
