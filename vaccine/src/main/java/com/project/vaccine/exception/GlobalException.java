@@ -60,6 +60,7 @@ public class GlobalException {
         return new ResponseEntity<>("Authentication error: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
+    // Xử lí lỗi phân quyền
     @ExceptionHandler(AuthorizeException.class)
     public ResponseEntity<?> handleAuthorizeException(AuthorizeException ex) {
         return new ResponseEntity<>("Authorize error: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);

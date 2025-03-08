@@ -1,6 +1,7 @@
 package com.project.vaccine.service;
 
 import com.project.vaccine.dto.ChildDTO;
+import com.project.vaccine.dto.response.ChildResponse;
 import com.project.vaccine.entity.Child;
 import com.project.vaccine.entity.User;
 import com.project.vaccine.exception.NotFoundException;
@@ -71,7 +72,7 @@ public class ChildService {
 
     public void deleteChildByCurrentUser(Long id) {
         User user = userUtils.getCurrentUser();
-        Child child = childRepository.findByIdAndUserId(id, user.getId()).orElseThrow(()
+        Child child = childRepository.findByIdAndUserId(id, user.getId  ()).orElseThrow(()
                 -> new NotFoundException("Child not found"));
         // set status to false
         child.setStatus(false);
@@ -79,8 +80,31 @@ public class ChildService {
     }
 
     // Add method to get all children, Admin can view all children
-    public List<ChildDTO> getAllChildren() {
-        return null;
+    public List<ChildResponse> getAllChildren() {
+        return childRepository.findAllChildByUser().stream()
+                .map(child -> modelMapper.map(child, ChildResponse.class))
+                .collect(Collectors.toList());
     }
 
+    public List<ChildDTO> getChildByName(String name) {
+        List<Child> children = childRepository.findByNameContaining(name);
+        return children.stream().
+                map(child -> modelMapper.map(child, ChildDTO.class)).collect(Collectors.toList());
+    }
+
+    public boolean deleteChildById(Long id) {
+        Child child = childRepository.findById(id).orElseThrow(() -> new NotFoundException("Child not found"));
+        child.setStatus(false);
+        childRepository.save(child);
+        return child.isStatus();
+    }
+
+    public ChildDTO updateChildById(Long id, ChildDTO childDTO) {
+        LocalDateTime now = LocalDateTime.now();
+        Child child = childRepository.findById(id).orElseThrow(() -> new NotFoundException("Child not found"));
+        modelMapper.map(childDTO, child);
+        child.setUpdatedAt(now);
+        childRepository.save(child);
+        return modelMapper.map(childRepository.save(child), ChildDTO.class);
+    }
 }

@@ -14,6 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LoginResponse {
 
+    private String username;
+
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 

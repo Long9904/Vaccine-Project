@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class VaccineDetailsDTO {
 
-    private long id;
+    private Long id;
 
     @Min(value = 1, message = "Dose number must be at least 1")
     private int doseNumber;

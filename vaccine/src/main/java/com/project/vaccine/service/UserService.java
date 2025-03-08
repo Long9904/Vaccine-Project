@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -31,9 +32,13 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> modelMapperConfig.modelMapper().map(user, UserDTO.class))
+                .collect(Collectors.toList());
     }
+
 
     public UserDTO getUserProfile(String username, String email) {
 
@@ -60,6 +65,7 @@ public class UserService {
 
     public UserDTO updateCurrentUser(String username, UserRequest userRequest) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
+        // get user details from token
 
         String message = "";
 

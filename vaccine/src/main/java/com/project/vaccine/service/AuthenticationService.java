@@ -62,7 +62,7 @@ public class AuthenticationService implements UserDetailsService {
 
         User user = modelMapperConfig.modelMapper().map(userRequest, User.class);
             user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-            user.setRole(RoleEnum.USER);
+            user.setRole(RoleEnum.ADMIN); // change to USER if you want to register as user
             user.setStatus(UserStatusEnum.INACTIVE);
             authenticationRepository.save(user);
         return "Account created successfully";
@@ -87,6 +87,7 @@ public class AuthenticationService implements UserDetailsService {
             }
             String token = tokenService.generateAccessToken(user);
             LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setUsername(user.getUsername());
             loginResponse.setAccessToken(token);
             loginResponse.setRole(user.getRole());
             return loginResponse;
