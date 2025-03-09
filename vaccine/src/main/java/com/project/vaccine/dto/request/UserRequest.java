@@ -16,7 +16,6 @@ import java.time.Period;
 public class UserRequest {
     @Pattern(regexp = "^[0-9A-Za-z]{6,16}$", message = "Username must contain 6-16 characters")
 
-
     @Pattern(regexp = "^[0-9A-Za-z]*$", message = "Username must not contain special characters")
     private String username;
 
