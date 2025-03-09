@@ -35,6 +35,10 @@ public class Vaccine {
     @Min(value = 0,message = "Quantity must be at least 0")
     private long quantity;
 
+
+    @Min(value = 0,message = "Price must be at least 0")
+    private double price;
+
     private LocalDateTime createAt;
 
     private LocalDateTime updateAt;

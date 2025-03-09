@@ -6,18 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8f4a6d15-88a7-4cdb-8cb0-0f10cea4add0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/ChildAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/ChildAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/PublicAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/controller/PublicAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/VaccineDetailsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/VaccineDetailsDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/request/UserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/request/UserRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/response/ChildResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/response/ChildResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/Child.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/Child.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/VaccineDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/dto/VaccineDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/Vaccine.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/Vaccine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/VaccineDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/entity/VaccineDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/exception/GlobalException.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/exception/GlobalException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/repository/ChildRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/repository/ChildRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/service/ChildService.java" beforeDir="false" afterPath="$PROJECT_DIR$/vaccine/src/main/java/com/project/vaccine/service/ChildService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

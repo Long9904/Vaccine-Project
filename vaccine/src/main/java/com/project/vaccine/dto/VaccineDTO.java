@@ -27,6 +27,9 @@ public class VaccineDTO {
     @Min(value = 1, message = "Quantity must be at least 1")
     private long quantity;
 
+    @Min(value = 0,message = "Price must be at least 0")
+    private double price;
+
     @Size(min = 1, message = "At least one vaccine detail is required")
     private List<VaccineDetailsDTO> vaccineDetails;
 }

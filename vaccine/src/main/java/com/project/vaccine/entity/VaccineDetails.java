@@ -36,8 +36,6 @@ public class VaccineDetails {
     @JsonBackReference
     private Vaccine vaccine;
 
-    @Min(value = 0,message = "Price must be at least 0")
-    private double price;
 
     private int minAgeMonth;
 
