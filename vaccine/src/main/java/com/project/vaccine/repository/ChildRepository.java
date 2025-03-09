@@ -20,9 +20,9 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
     @Query("SELECT c FROM Child c WHERE c.name LIKE %:name%")
     List<Child> findByNameContaining(@Param("name") String name);
 
-    @Query("SELECT c FROM Child c JOIN FETCH c.user")
-    List<Child> findAllChildByUser();
-
+    @Query("SELECT new com.project.vaccine.dto.response.ChildResponse(c.id, c.name, c.gender, c.dob, c.weight, c.height, c.note, u.id, u.name) " +
+            "FROM Child c JOIN c.user u")
+    List<ChildResponse> findAllChildByUserWithDetails();
 
 
 }

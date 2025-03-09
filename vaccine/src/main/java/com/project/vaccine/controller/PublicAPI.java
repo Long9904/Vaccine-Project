@@ -16,7 +16,7 @@ public class PublicAPI {
     @Autowired
     private VaccineService vaccineService;
 
-    @GetMapping("/vaccine")
+    @GetMapping("/vaccines")
     public ResponseEntity<?> getAllActiveVaccines() {
         return ResponseEntity.ok(vaccineService.getAllActiveVaccines());
     }

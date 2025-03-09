@@ -1,5 +1,6 @@
 package com.project.vaccine.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,14 @@ public class VaccineDetailsDTO {
 
     @Min(value = 0, message = "Price must be at least 0")
     private double price;
+
+    @Min(value = 0, message = "Min age month must be at least 0")
+    @Max(value = 72, message = "Min age month must be at most 72") // 6 years
+    private int minAgeMonth;
+
+    @Min(value = 0, message = "Max age month must be at least 0")
+    @Max(value = 72, message = "Max age month must be at most 72") // 6 years
+    private int maxAgeMonth;
 
     private boolean recommended;
 }

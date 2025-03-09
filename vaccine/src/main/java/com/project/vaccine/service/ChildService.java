@@ -81,9 +81,7 @@ public class ChildService {
 
     // Add method to get all children, Admin can view all children
     public List<ChildResponse> getAllChildren() {
-        return childRepository.findAllChildByUser().stream()
-                .map(child -> modelMapper.map(child, ChildResponse.class))
-                .collect(Collectors.toList());
+        return childRepository.findAllChildByUserWithDetails();
     }
 
     public List<ChildDTO> getChildByName(String name) {

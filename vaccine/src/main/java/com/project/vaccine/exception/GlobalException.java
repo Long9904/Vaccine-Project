@@ -8,6 +8,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,13 +63,13 @@ public class GlobalException {
         return new ResponseEntity<>("Authentication error: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
-    // Xử lí lỗi phân quyền
+    // Xử lí lỗi authorize
     @ExceptionHandler(AuthorizeException.class)
     public ResponseEntity<?> handleAuthorizeException(AuthorizeException ex) {
         return new ResponseEntity<>("Authorize error: " + ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
-    // Xử lí lỗi dữ liệu dose_number vượt quá quantity của Vaccine
+    // Xử lí lỗi dữ liệu invalid
     @ExceptionHandler(InvalidDataException.class)
     public ResponseEntity<?> handleInvalidDataException(InvalidDataException ex) {
         return new ResponseEntity<>("Invalid data: "+ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -76,4 +79,6 @@ public class GlobalException {
     public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException ex) {
         return new ResponseEntity<>("Constraint violation: "+ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+
 }

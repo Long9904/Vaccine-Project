@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +14,7 @@ public class ChildResponse {
     private Long id;
     private String name;
     private String gender;
-    private String dob;
+    private LocalDate dob;
     private double weight;
     private double height;
     private String note;
